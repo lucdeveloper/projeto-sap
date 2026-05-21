@@ -1,0 +1,5 @@
+export enum StatusTelaPedido {
+  CRIANDO = 'CRIANDO',
+  VISUALIZANDO = 'VISUALIZANDO',
+  EDITANDO = 'EDITANDO'
+}
