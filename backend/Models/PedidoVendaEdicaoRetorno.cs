@@ -8,6 +8,7 @@ public class PedidoVendaEdicaoRetorno
     public string Cliente { get; set; } = string.Empty;
     public string NumeroReferenciaCliente { get; set; } = string.Empty;
     public decimal ValorTotalPedido { get; set; }
+    public int? CodigoAnexo { get; set; }
     public DateTime DataEntrega { get; set; }
     public DateTime DataLancamento { get; set; }
     public DateTime DataDocumento { get; set; }

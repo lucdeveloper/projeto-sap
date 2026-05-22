@@ -169,17 +169,18 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
                DataDocumento = r.GetDateTime(4),
                NumeroReferenciaCliente = r.IsDBNull(5) ? string.Empty : r.GetString(5),
                ValorTotalPedido = r.GetDecimal(6),
-               CodigoCliente = r.GetString(7),
-               Cliente = r.GetString(8),
-               Linha = r.GetInt32(9),
-               CodigoItem = r.GetString(10),
-               DescricaoItem = r.GetString(11),
-               Quantidade = r.GetDecimal(12),
-               PrecoUnitario = r.GetDecimal(13),
-               Imposto = r.GetString(14),
-               CodigoPessoaContato = r.IsDBNull(15) ? null : r.GetInt32(15),
-               PessoaContato = r.IsDBNull(16) ? string.Empty : r.GetString(16),
-               EmailContato = r.IsDBNull(17) ? string.Empty : r.GetString(17)
+               CodigoAnexo = r.IsDBNull(7) ? null : r.GetInt32(7),
+               CodigoCliente = r.GetString(8),
+               Cliente = r.GetString(9),
+               Linha = r.GetInt32(10),
+               CodigoItem = r.GetString(11),
+               DescricaoItem = r.GetString(12),
+               Quantidade = r.GetDecimal(13),
+               PrecoUnitario = r.GetDecimal(14),
+               Imposto = r.GetString(15),
+               CodigoPessoaContato = r.IsDBNull(16) ? null : r.GetInt32(16),
+               PessoaContato = r.IsDBNull(17) ? string.Empty : r.GetString(17),
+               EmailContato = r.IsDBNull(18) ? string.Empty : r.GetString(18)
            });
 
         var pedidoVenda = dadosPedidoVenda.GroupBy(x => x.Documento)
@@ -190,6 +191,7 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
                                               CodigoCliente = pedido.First().CodigoCliente,
                                               Cliente = pedido.First().Cliente,
                                               ValorTotalPedido = pedido.First().ValorTotalPedido.ToString("C", new CultureInfo("pt-BR")),
+                                              CodigoAnexo = pedido.First().CodigoAnexo,
                                               DataEntrega = pedido.First().DataEntrega,
                                               DataDocumento = pedido.First().DataDocumento,
                                               DataLancamento = pedido.First().DataLancamento,
@@ -206,9 +208,11 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
                                                   Preco = item.PrecoUnitario,
                                                   Imposto = item.Imposto
                                               })]
-
                                           })
                                           .FirstOrDefault();
+
+        if(pedidoVenda?.CodigoAnexo is not null)
+            pedidoVenda.Anexos = await ObterAnexos((int)pedidoVenda.CodigoAnexo);
 
 
         return pedidoVenda is null ? new PedidoVendaRetornoDTO() : pedidoVenda;
@@ -269,6 +273,7 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
 	                                        T0.""TaxDate"" AS ""DataDocumento"",
 	                                        T0.""NumAtCard"" AS ""ReferenciaCliente"",
                                             T0.""DocTotal"" AS ""ValorTotalPedido"",
+                                            T0.""AtcEntry"" AS ""CodigoAnexo"",
 	                                        -- Dados do Cliente (Cadastro)
 	                                        T1.""CardCode"" AS ""CodigoCliente"",
 	                                        T1.""CardName"" AS ""Cliente"",
@@ -300,6 +305,34 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
 
         var parametros = new List<OdbcParameter> { new() { Value = codigo } };
         return (query.ToString(), parametros);
+    }
+
+    private async Task<List<AnexoPedidoRetornoDTO>> ObterAnexos(int codigoAnexo)
+    {
+        var query = @"SELECT 
+	                       T0.""Line"" AS ""LinhaAnexo"",
+	                       T0.""srcPath"" AS ""CaminhoDestino"",
+	                       T0.""trgtPath"" AS ""CaminhoSubPasta"",
+	                       T0.""FileName"" AS ""NomeArquivo"",
+	                       T0.""FileExt"" AS ""ExtensaoArquivo""
+                      FROM
+	                      ATC1 T0
+                      WHERE
+	                      T0.""AbsEntry"" = ?";
+
+        var parametros = new List<OdbcParameter> { new() { Value = codigoAnexo } };
+        
+        var anexos = await _sapBase.QueryParam(query, parametros, 
+            r => new AnexoPedidoRetornoDTO
+            {
+                Linha = r.GetInt32(0),
+                CaminhoDestino = r.GetString(1),
+                CaminhoSubPasta = r.GetString(2),
+                NomeArquivo = r.GetString(3),
+                ExtensaoArquivo = r.GetString(4)
+            });
+
+        return anexos;
     }
     
     private async Task<Decimal> RetornarValorTotalItens(int documentoEntrada)

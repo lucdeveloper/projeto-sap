@@ -20,6 +20,22 @@ public class AnexoService(SAPBase sapBase)
         return dadosAnexo is null ? new AnexoConsultaDTO() : dadosAnexo;
     }
 
+    public async Task<AnexoConsultaDTO> Editar(AnexoConsultaDTO anexo)
+    {
+        var query = MontarQuery();
+
+        var dadosAnexo = await _sapBase.QuerySingle(query, null,
+                r => new AnexoConsultaDTO
+                {
+                    CaminhoPastaAnexo = r.GetString(0)
+                });
+
+        return dadosAnexo is null ? new AnexoConsultaDTO() : dadosAnexo;
+    }
+
+
+
+
     private string MontarQuery()
     {
         var query = @"SELECT ""AttachPath"" AS ""CaminhoAnexo"" FROM OADP o ";

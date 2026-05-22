@@ -8,6 +8,7 @@ public class PedidoVendaRetornoDTO
     public string Cliente { get; set; } = string.Empty;
     public string NumeroReferenciaCliente { get; set; } = string.Empty;
     public string ValorTotalPedido { get; set; } = string.Empty;
+    public int? CodigoAnexo { get; set; }
     public DateTime DataLancamento { get; set; }
     public DateTime DataEntrega { get; set; } 
     public DateTime DataDocumento { get; set; }
@@ -16,4 +17,5 @@ public class PedidoVendaRetornoDTO
     public string EmailContato { get; set; } = string.Empty;
     public int Empresa { get; set; }
     public List<ItemPedidoRetornoDTO> Itens { get; set; } = [];
+    public List<AnexoPedidoRetornoDTO> Anexos { get; set; } = [];
 }
