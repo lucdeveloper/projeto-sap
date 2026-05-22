@@ -121,7 +121,7 @@ public class SAPBase(HttpClient httpClient, IOptions<SAPConfiguracoes> configura
         return lista;
     }
 
-    public async Task<T?> QuerySingle<T>(string query, OdbcParameter parametro, Func<DbDataReader, T> mapeamento)
+    public async Task<T?> QuerySingle<T>(string query, OdbcParameter? parametro, Func<DbDataReader, T> mapeamento)
     {
         using var conexao = new OdbcConnection(_stringConexao.HanaConnection);
         await conexao.OpenAsync();

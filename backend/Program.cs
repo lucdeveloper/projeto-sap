@@ -24,6 +24,7 @@ builder.Services.AddScoped<ItemService>();
 builder.Services.AddScoped<ImpostoService>();
 builder.Services.AddScoped<FilialService>();
 builder.Services.AddScoped<GrupoItemService>();
+builder.Services.AddScoped<AnexoService>();
 
 builder.Services.AddHttpClient<SAPBase>((sap, client) =>
 {
