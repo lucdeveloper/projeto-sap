@@ -497,7 +497,7 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
             flexDirection: 'column',
             width: '100%', 
             minHeight: '100vh',
-            alignItems: 'stretch' // Força os filhos (sua página) a ocuparem toda a largura disponível
+            alignItems: 'stretch'
         }}>
         
         <div style={{ width: '100%' }}>
