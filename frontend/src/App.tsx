@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ConsultaPedidoVenda } from "./components/PedidoVenda/components/ConsultaPedidoVenda.tsx";
 import { PedidoVenda } from "./components/PedidoVenda/PedidoVenda.tsx";
 import { AppLayout } from "./layouts/AppLayout/AppLayout.tsx";
-import { Anexo } from "./components/Anexo.tsx";
+import { Anexo } from "./components/Anexo/Anexo.tsx";
 
 function App() {
   return (

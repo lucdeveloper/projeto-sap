@@ -10,7 +10,7 @@ import {
   BusyIndicator,
   Input
 } from "@ui5/webcomponents-react";
-import { useAnexo } from "../hooks/useAnexo";
+import { useAnexo } from "../../hooks/useAnexo";
 import { useEffect, useState } from "react";
 
 export function Anexo() {

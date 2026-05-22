@@ -56,7 +56,7 @@ return (
         <BarraNavegacao />
 
         <ObjectPage
-            mode= "Default"
+            mode= "IconTabBar"
             headerPinned
             hidePinButton 
             selectedSectionId="geral"
@@ -159,57 +159,113 @@ return (
 
         <ObjectPageSection id="conteudo" titleText="Conteúdo"> 
         
-    <FlexBox direction="Column">
-            <Bar
-                design="Header"
-                startContent={<Label style={{ color: "#0a6ed1", fontWeight: "bold" }}>Produto</Label>}
-            /> 
+            <FlexBox direction="Column">
+                <Bar
+                    design="Header"
+                    startContent={<Label style={{ color: "#0a6ed1", fontWeight: "bold" }}>Produto</Label>}
+                /> 
+            
+                <Table id="table"
+                    overflowMode="Scroll"
+                headerRow=
+                    {<TableHeaderRow sticky>
+                        <TableHeaderCell minWidth="200px" width="200px"><span>#</span></TableHeaderCell>
+                        <TableHeaderCell minWidth="200px"><span>Nº do item</span></TableHeaderCell>
+                        <TableHeaderCell minWidth="200px"><span>Descrição do item</span></TableHeaderCell>
+                        <TableHeaderCell minWidth="100px"><span>Quantidade</span></TableHeaderCell>
+                        <TableHeaderCell minWidth="100px"><span>Preço unitário</span></TableHeaderCell>
+                        <TableHeaderCell minWidth="200px"><span>Código de imposto</span></TableHeaderCell>
+                    </TableHeaderRow>}
+                        >
+                            {dados?.itens?.map((item, index) => (
+                            <TableRow  key={`${item.codigo}-${index}`} rowKey={item.codigo.toString()}>
+
+                                <TableCell>
+                                    {index + 1}
+                                </TableCell>
+
+                                <TableCell>
+                                        <FlexBox alignItems="Center" style={{ gap: "0.25rem" }}>
+                                        <Icon name="feeder-arrow" style={{ color: "#ff9306" }} />
+                                        <Link wrappingType="None" onClick={(e) => abrirItem(e.target, item.codigo)}>{item.codigo}</Link>
+                                    </FlexBox>
+                                </TableCell>
+
+                                <TableCell>
+                                    <Text>{item.descricao}</Text>
+                                </TableCell>
+
+                                <TableCell>
+                                        <Text>{item.quantidade}</Text>
+                                </TableCell>
+
+                                <TableCell>
+                                        <Text>{formatarMoedaBR(item.preco)}</Text>
+                                </TableCell>
+
+                                <TableCell>
+                                    <Text>{item.imposto}</Text>
+                                </TableCell>
+                            </TableRow>
+                        ))} 
+                </Table>
+            </FlexBox>
+
+        </ObjectPageSection>
+
+        <ObjectPageSection id="anexo" titleText="Anexo"> 
         
-        <Table id="table"
-            overflowMode="Scroll"
-        headerRow=
-            {<TableHeaderRow sticky>
-                <TableHeaderCell minWidth="200px" width="200px"><span>#</span></TableHeaderCell>
-                <TableHeaderCell minWidth="200px"><span>Nº do item</span></TableHeaderCell>
-                <TableHeaderCell minWidth="200px"><span>Descrição do item</span></TableHeaderCell>
-                <TableHeaderCell minWidth="100px"><span>Quantidade</span></TableHeaderCell>
-                <TableHeaderCell minWidth="100px"><span>Preço unitário</span></TableHeaderCell>
-                <TableHeaderCell minWidth="200px"><span>Código de imposto</span></TableHeaderCell>
-            </TableHeaderRow>}
-                >
-                    {dados?.itens?.map((item, index) => (
-                    <TableRow  key={`${item.codigo}-${index}`} rowKey={item.codigo.toString()}>
+            <FlexBox direction="Column">
+                <Bar
+                    design="Header"
+                    startContent={<Label style={{ color: "#0a6ed1", fontWeight: "bold" }}>Produto</Label>}
+                /> 
+            
+                <Table id="table"
+                    overflowMode="Scroll"
+                headerRow=
+                    {<TableHeaderRow sticky>
+                        <TableHeaderCell minWidth="200px" width="200px"><span>#</span></TableHeaderCell>
+                        <TableHeaderCell minWidth="200px"><span>Caminho de destino</span></TableHeaderCell>
+                        <TableHeaderCell minWidth="200px"><span>Caminho da subpasta</span></TableHeaderCell>
+                        <TableHeaderCell minWidth="100px"><span>Nome do arquivo</span></TableHeaderCell>
+                        <TableHeaderCell minWidth="100px"><span>Extensão do arquivo</span></TableHeaderCell>
+                    </TableHeaderRow>}
+                        >
+                            {dados?.itens?.map((item, index) => (
+                            <TableRow  key={`${item.codigo}-${index}`} rowKey={item.codigo.toString()}>
 
-                        <TableCell>
-                            {index + 1}
-                        </TableCell>
+                                <TableCell>
+                                    {index + 1}
+                                </TableCell>
 
-                        <TableCell>
-                                <FlexBox alignItems="Center" style={{ gap: "0.25rem" }}>
-                                <Icon name="feeder-arrow" style={{ color: "#ff9306" }} />
-                                <Link wrappingType="None" onClick={(e) => abrirItem(e.target, item.codigo)}>{item.codigo}</Link>
-                            </FlexBox>
-                        </TableCell>
+                                <TableCell>
+                                        <FlexBox alignItems="Center" style={{ gap: "0.25rem" }}>
+                                        <Icon name="feeder-arrow" style={{ color: "#ff9306" }} />
+                                        <Link wrappingType="None" onClick={(e) => abrirItem(e.target, item.codigo)}>{item.codigo}</Link>
+                                    </FlexBox>
+                                </TableCell>
 
-                        <TableCell>
-                            <Text>{item.descricao}</Text>
-                        </TableCell>
+                                <TableCell>
+                                    <Text>{item.descricao}</Text>
+                                </TableCell>
 
-                        <TableCell>
-                                <Text>{item.quantidade}</Text>
-                        </TableCell>
+                                <TableCell>
+                                        <Text>{item.quantidade}</Text>
+                                </TableCell>
 
-                        <TableCell>
-                                <Text>{formatarMoedaBR(item.preco)}</Text>
-                        </TableCell>
+                                <TableCell>
+                                        <Text>{formatarMoedaBR(item.preco)}</Text>
+                                </TableCell>
 
-                        <TableCell>
-                            <Text>{item.imposto}</Text>
-                        </TableCell>
-                    </TableRow>
-                ))} 
-        </Table>
-        </FlexBox>
+                                <TableCell>
+                                    <Text>{item.imposto}</Text>
+                                </TableCell>
+                            </TableRow>
+                        ))} 
+                </Table>
+            </FlexBox>
+            
         </ObjectPageSection>
 
         </ObjectPage>
