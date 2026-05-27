@@ -3,9 +3,11 @@ import { ConsultaPedidoVenda } from "./components/PedidoVenda/components/Consult
 import { PedidoVenda } from "./components/PedidoVenda/PedidoVenda.tsx";
 import { AppLayout } from "./layouts/AppLayout/AppLayout.tsx";
 import { Anexo } from "./components/Anexo/Anexo.tsx";
+import { AnexoProvider } from "./contexts/anexoContext.tsx";
 
 function App() {
   return (
+     <AnexoProvider>
     <BrowserRouter>
       <Routes>
          <Route element={<AppLayout />}>
@@ -15,7 +17,8 @@ function App() {
           <Route path="/pedido-venda" element={<PedidoVenda />} />
           <Route path="/pedido-venda/:id" element={<PedidoVenda />} />
       </Routes>
-    </BrowserRouter>  
+    </BrowserRouter> 
+    </AnexoProvider> 
   );
 }
 

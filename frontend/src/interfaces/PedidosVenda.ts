@@ -22,6 +22,16 @@ export interface ItemPedido {
   preco: number;
 }
 
+export interface AnexoPedido {
+  linha?: number;
+  codigo?: number;
+  caminhoDestino: string;
+  nomeArquivo: string;
+  extensaoArquivo: string;
+  tamanhoArquivo: number;
+}
+
+
 export interface PedidoVenda {
   cliente: string;
   dataEntrega: string;
@@ -29,6 +39,7 @@ export interface PedidoVenda {
   pessoaContato: number | null;
   numeroReferenciaCliente: string;
   itens: ItemPedido[];
+  anexos: AnexoPedido[];
 }
 
 export interface ItemPedidoRetornoDTO {
@@ -38,6 +49,24 @@ export interface ItemPedidoRetornoDTO {
   quantidade: number;
   imposto: string;
   preco: number;
+}
+
+export interface ItemPedidoRetornoDTO {
+  linha: number;
+  codigo: string;
+  descricao: string;
+  quantidade: number;
+  imposto: string;
+  preco: number;
+}
+
+export interface AnexoPedidoRetornoDTO {
+  codigo: number;
+  linha: number;
+  caminhoDestino: string;
+  nomeArquivo: string;
+  extensaoArquivo: string;
+  tamanho: number;
 }
 
 export interface PedidoVendaRetornoDTO {
@@ -55,6 +84,7 @@ export interface PedidoVendaRetornoDTO {
   emailContato: string;
   empresa: number;
   itens: ItemPedidoRetornoDTO[];
+  anexos: AnexoPedidoRetornoDTO[];
 }
 
 export interface ItemPedidoEdicao {

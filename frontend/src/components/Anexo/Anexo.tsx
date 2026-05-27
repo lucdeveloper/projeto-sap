@@ -10,16 +10,12 @@ import {
   BusyIndicator,
   Input
 } from "@ui5/webcomponents-react";
-import { useAnexo } from "../../hooks/useAnexo";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useAnexoContext } from "../../contexts/anexoContext";
 
 export function Anexo() {
-  const { anexo, loading, carregarAnexo } = useAnexo();
-  const [editMode, setEditMode] = useState(false);
-
-  useEffect(() => {
-    carregarAnexo();
-  }, []);
+   const { anexo, loading } = useAnexoContext();
+   const [editMode, setEditMode] = useState(false);
 
   return (
     <BusyIndicator 

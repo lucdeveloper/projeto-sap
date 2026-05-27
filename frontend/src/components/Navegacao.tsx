@@ -8,8 +8,8 @@ export function Navegacao( ) {
    const navigate = useNavigate();
 
     const menu = [
-        { label: "Configuração de anexo", path: "/anexo", icon: "enablement" },
-        { label: "Pedidos de venda", path: "/", icon: "sales-quote" }
+        { id: 1, label: "Configuração de anexo", path: "/anexo", icon: "enablement" },
+        { id: 2, label: "Pedidos de venda", path: "/", icon: "sales-quote" }
     ];
 
     return(
@@ -44,6 +44,7 @@ export function Navegacao( ) {
                         <SideNavigation slot="sideContent">
                             { menu.map(item => (
                                 <SideNavigationItem
+                                key={item.id}
                                     icon={item.icon}
                                     text={item.label}
                                     onClick={() => navigate(item.path)}

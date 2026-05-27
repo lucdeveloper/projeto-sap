@@ -13,7 +13,7 @@ import { PopoverView } from '../../PopoverView.tsx';
 import { useParceiroNegocioSearch } from '../../../hooks/useParceiroNegocioSearch.ts';
 import { usePedidosVenda } from '../../../hooks/usePedidosVenda.ts';
 import { useClientePopover } from '../../../hooks/Popover/useClientePopover.ts';
-import { ItemPedido, ItemPedidoEdicao, ItemPedidoRetornoDTO, PedidoVenda, PedidoVendaEdicao, PedidoVendaRetornoDTO } from '../../../interfaces/PedidosVenda.ts';
+import { AnexoPedido, AnexoPedidoRetornoDTO, ItemPedido, ItemPedidoEdicao, ItemPedidoRetornoDTO, PedidoVenda, PedidoVendaEdicao, PedidoVendaRetornoDTO } from '../../../interfaces/PedidosVenda.ts';
 import { PessoaContatoFiltro } from '../../../interfaces/PessoaContato.ts';
 import { 
     Link, 
@@ -46,9 +46,13 @@ import {
     FilterGroupItem, 
     Token, 
     Toast, 
-    AnalyticalTable
+    AnalyticalTable,
+    FileUploader,
+    Text,
 } from '@ui5/webcomponents-react';
 import { formatarDataISO } from '../../../utils/dateUtils.ts';
+import { useAnexoContext } from '../../../contexts/anexoContext.tsx';
+import { AnexoIconeHelper } from '../../../utils/anexoHelper.ts';
 
 type LinhaItemPedido = ItemPedido & {
   IdLinha?: number;
@@ -86,6 +90,8 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
     const [idsMarcadosParaExcluir, setIdsMarcadosParaExcluir] = useState<number[]>([]);
     const [linhas, setLinhas] = useState<LinhaItemPedido[]>([]);
     const [indexLinhaAtiva, setIndexLinhaAtiva] = useState<number | null>(null);
+    const {uploadAnexo, arquivosUpload, setArquivosUpload, removerAnexos } = useAnexoContext();
+    const [anexosSelecionadas, setAnexosSelecionadas] = useState<number[]>([]);
   
     /* Componentes de impostos */
     const { 
@@ -160,6 +166,7 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
     const { abrirCliente, popoverProps } = useClientePopover();
     
     const selectionRef = useRef<any>(null);
+    const anexoReferencia = useRef<any>(null);
     
     const [dadosForm, setDadosForm] = useState<PedidoVenda>({
         cliente: "",
@@ -167,7 +174,8 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
         pessoaContato: null,
         numeroReferenciaCliente: "",
         empresa: 0,
-        itens: []
+        itens: [],
+        anexos:[]
     });
 
     const tabelaClientes =  [
@@ -263,6 +271,18 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
         setIdsMarcadosParaExcluir(ids);
     };
 
+    const selecionarAnexos = () => {
+
+        const selection = anexoReferencia.current;
+
+        if (!selection) return;
+
+        const ids = Array.from(selection.getSelectedAsSet())
+                         .map((key) => Number(key as string));
+
+        setAnexosSelecionadas(ids);
+    };
+
     const normalizeLinhas = (linhasAtuais: LinhaItemPedido[]) => {
         const preenchidas = linhasAtuais.filter(l => l.item || l.imposto);
 
@@ -286,12 +306,9 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
     };
 
     const removerSelecionados = () => {
-        setLinhas(prev => {
-            const novasLinhas = prev.filter(linha => !idsMarcadosParaExcluir.includes(linha.id)  
-        );
-
-        return normalizeLinhas(novasLinhas);
-    });
+        setLinhas(prev => { const novasLinhas = prev.filter(linha => !idsMarcadosParaExcluir.includes(linha.id) );
+            return normalizeLinhas(novasLinhas);
+        });
 
         setIdsMarcadosParaExcluir([]);
     };
@@ -401,35 +418,56 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
     }, [isEdicao, dadosEdicao]);
 
     useEffect(() => {
-        if(dadosEdicao){
-            setParceiroNegocioSelecionado({
-                codigoCliente: dadosEdicao.codigoCliente,
-                nomeCliente: dadosEdicao.cliente,
-                pessoaContato: dadosEdicao.pessoaContato,
-                emailContato: dadosEdicao.emailContato
-            } as ParceiroNegocioDTO);
 
-            setDadosForm({
-                cliente: dadosEdicao.codigoCliente,
-                numeroReferenciaCliente: dadosEdicao.numeroReferenciaCliente || "",
-                dataEntrega: formatarDataISO(dadosEdicao.dataEntrega),
-                empresa: dadosEdicao.empresa,
-                pessoaContato: dadosEdicao.codigoPessoaContato,
-                itens: []
-            });
-
-            const linhasVindasDoBanco = dadosEdicao.itens.map((item: ItemPedidoRetornoDTO) => ({
-                id: item.linha,
-                IdLinha: item.linha,
-                item: item.codigo,
-                descricao: item.descricao,
-                quantidade: item.quantidade,
-                preco: item.preco,
-                imposto: item.imposto
-            }));
-            setLinhas(normalizeLinhas(linhasVindasDoBanco));
-        } else {
+        if (!dadosEdicao) {
             setLinhas([]);
+            setArquivosUpload([]);
+            return;
+        }
+
+        setParceiroNegocioSelecionado({
+            codigoCliente: dadosEdicao.codigoCliente,
+            nomeCliente: dadosEdicao.cliente,
+            pessoaContato: dadosEdicao.pessoaContato,
+            emailContato: dadosEdicao.emailContato
+        } as ParceiroNegocioDTO);
+
+        setDadosForm({
+            cliente: dadosEdicao.codigoCliente,
+            numeroReferenciaCliente: dadosEdicao.numeroReferenciaCliente || "",
+            dataEntrega: formatarDataISO(dadosEdicao.dataEntrega),
+            empresa: dadosEdicao.empresa,
+            pessoaContato: dadosEdicao.codigoPessoaContato,
+            itens: [],
+            anexos: []
+        });
+
+        const linhasVindasDoBanco = dadosEdicao.itens.map((item: ItemPedidoRetornoDTO) => ({
+            id: item.linha,
+            IdLinha: item.linha,
+            item: item.codigo,
+            descricao: item.descricao,
+            quantidade: item.quantidade,
+            preco: item.preco,
+            imposto: item.imposto
+        }));
+
+        setLinhas(normalizeLinhas(linhasVindasDoBanco));
+
+        if (arquivosUpload.length === 0) {
+
+            const anexosBanco: AnexoPedido[] = dadosEdicao.anexos.map(
+                (anexo: AnexoPedidoRetornoDTO) => ({
+                    codigo: anexo.codigo,
+                    linha: anexo.linha,
+                    caminhoDestino: anexo.caminhoDestino ?? "",
+                    nomeArquivo: anexo.nomeArquivo ?? "",
+                    extensaoArquivo: anexo.extensaoArquivo ?? "",
+                    tamanhoArquivo: anexo.tamanho,
+                })
+            );
+
+            setArquivosUpload(anexosBanco);
         }
 
     }, [dadosEdicao]);
@@ -437,7 +475,10 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
     const handleAdicionar = async () => {
         setCarregando(true);
         try {
-            const resultado = await criarPedidoVenda(dadosForm);
+            const resultado = await criarPedidoVenda({
+                ...dadosForm,
+                anexos: arquivosUpload
+            });
             setOpenToast(true);
             
             setTimeout(() => {
@@ -1192,7 +1233,7 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
                         /> 
                     
                         <Table 
-                            id="table"
+                            id="table-itens"
                             overflowMode="Scroll"
                             features={
                                 <TableSelectionMulti
@@ -1261,7 +1302,85 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
                                                 )}
                                             </TableCell>
                                         </TableRow>
-                                    ))}
+                                ))}
+                        </Table>
+                    </FlexBox>
+                </ObjectPageSection>
+
+                 <ObjectPageSection id="anexo" titleText="Anexos"> 
+                    <FlexBox direction="Column">
+                        <Bar
+                            design="Header"
+                            startContent={<Label style={{ color: "#0a6ed1", fontWeight: "bold" }}>Anexo</Label>}
+                            endContent={
+                                <>
+                                    <FileUploader
+                                        hideInput
+                                        onChange={(e) => {
+                                            const arquivo = e.target.files?.[0];
+                                            if (arquivo) uploadAnexo(arquivo);
+                                        }}
+                                        valueState="None"
+                                        >
+                                        <Button design="Transparent">
+                                            Carregar
+                                        </Button>
+                                    </FileUploader>
+
+                                    <Button
+                                        icon="delete"
+                                        disabled={anexosSelecionadas.length === 0}
+                                        design="Transparent"
+                                        onClick={() =>{
+                                            removerAnexos(anexosSelecionadas);
+                                            setAnexosSelecionadas([])
+                                            console.log(anexosSelecionadas)
+                                        } }    
+                                    />
+                                </>
+                            }
+                        /> 
+                    
+                        <Table 
+                            id="table-anexos"
+                            overflowMode="Scroll"
+                            features={
+                                <TableSelectionMulti
+                                    ref={anexoReferencia}
+                                    behavior="RowSelector"
+                                    onChange={selecionarAnexos} 
+                                />
+                            }
+                            headerRow={
+                                <TableHeaderRow sticky>
+                                    <TableHeaderCell minWidth="200px"><span>Caminho de destino</span></TableHeaderCell>
+                                    <TableHeaderCell minWidth="100px"><span>Nome do arquivo</span></TableHeaderCell>
+                                    <TableHeaderCell minWidth="100px"><span>Extensão do arquivo</span></TableHeaderCell>
+                                    <TableHeaderCell minWidth="100px"><span>Tamanho do arquivo</span></TableHeaderCell>
+                                </TableHeaderRow>
+                            }
+                        >
+                                {arquivosUpload.map((anexo, index) => (
+                                        <TableRow key={index} rowKey={index.toString()}>
+                                            <TableCell>
+                                                <Text>{anexo.caminhoDestino}</Text>
+                                            </TableCell>
+                                            <TableCell>
+                                                 <Button 
+                                                    design='Transparent'
+                                                    icon={AnexoIconeHelper.obterIcone(anexo.extensaoArquivo)}  
+                                                    >
+                                                        {anexo.nomeArquivo}
+                                                </Button>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Text>{anexo.extensaoArquivo}</Text>
+                                            </TableCell>
+                                           <TableCell>
+                                                <Text>{anexo.tamanhoArquivo.toString()} KB</Text>
+                                            </TableCell>
+                                        </TableRow>
+                                ))}
                         </Table>
                     </FlexBox>
                 </ObjectPageSection>
