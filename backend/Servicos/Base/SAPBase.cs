@@ -33,26 +33,28 @@ public class SAPBase(HttpClient httpClient, IOptions<SAPConfiguracoes> configura
 
     public async Task<T> CriarRegistro<T>(string url, object data)
     {
-        var conteudo = CriarConteudo(data);
-        var resposta = await _httpClient.PostAsync(url, conteudo);
+        async Task<HttpResponseMessage> ExecutarRequisicao()
+        {
+            var conteudo = CriarConteudo(data);
+            return await _httpClient.PostAsync(url, conteudo);
+        }
+
+        var resposta = await ExecutarRequisicao();
 
         if (resposta.StatusCode == HttpStatusCode.Unauthorized)
         {
             await LoginAsync();
-            conteudo = CriarConteudo(data);
-            resposta = await _httpClient.PostAsync(url, conteudo);
+            resposta = await ExecutarRequisicao();
         }
 
         var resultado = await resposta.Content.ReadAsStringAsync();
 
-        if (!resposta.IsSuccessStatusCode) 
+        if (!resposta.IsSuccessStatusCode)
             throw new Exception(resultado);
 
         var objeto = JsonConvert.DeserializeObject<T>(resultado);
 
-        if (objeto == null) throw new Exception(resultado);
-
-        return objeto;
+        return objeto ?? throw new Exception(resultado);
     }
 
     public async Task AtualizarRegistro(string url, object data, bool replaceCollectionsOnPatch = false)
@@ -120,6 +122,25 @@ public class SAPBase(HttpClient httpClient, IOptions<SAPConfiguracoes> configura
 
         return lista;
     }
+
+    public async Task<T?> QueryFirstOrDefault<T>(string query, List<OdbcParameter>? parametros, Func<DbDataReader, T> mapeamento)
+    {
+        using var conexao = new OdbcConnection(_stringConexao.HanaConnection);
+        await conexao.OpenAsync();
+
+        using var comando = new OdbcCommand(query, conexao);
+
+        if (parametros is not null)
+            parametros.ForEach(parametro => comando.Parameters.Add(parametro));
+
+        using var reader = await comando.ExecuteReaderAsync();
+
+        if (await reader.ReadAsync())
+            return mapeamento(reader);
+
+        return default;
+    }
+
 
     public async Task<T?> QuerySingle<T>(string query, OdbcParameter? parametro, Func<DbDataReader, T> mapeamento)
     {

@@ -7,5 +7,6 @@ public class PedidoVenda
     public required int BPL_IDAssignedToInvoice { get; set; }
     public required int ContactPersonCode { get; set; }
     public string NumAtCard { get; set; } = string.Empty;
+    public int? AttachmentEntry { get; set; }
     public required List<PedidoVendaItem> DocumentLines { get; set; }
 }

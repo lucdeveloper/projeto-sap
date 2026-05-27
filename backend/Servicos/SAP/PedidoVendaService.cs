@@ -9,10 +9,11 @@ using System.Text;
 
 namespace sap.Servicos.SAP;
 
-public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiroNegocioService)
+public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiroNegocioService, AnexoService anexoService)
 {
     private readonly SAPBase _sapBase = sapBase;
     private readonly ParceiroNegocioService _parceiroNegocioService = parceiroNegocioService;
+    private readonly AnexoService _anexoService = anexoService;
 
     public async Task<int> ObterProximoCodigo()
     {
@@ -23,7 +24,6 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
     public async Task<List<PedidoVendaConsultaDTO>> Buscar(PedidoVendasFiltroConsultaDTO filtros)
     {
         var dadosConsulta = MontarQuery(filtros);
-
         var lista = await _sapBase.QueryParam(dadosConsulta.Item1, dadosConsulta.Item2,
                 r => new PedidoVendaConsultaDTO
                 {
@@ -37,21 +37,24 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
                 });
 
         lista.ForEach(async (pedido) => pedido.TotalDocumento = await RetornarValorTotalItens(pedido.NumeroDocumento));
-
         return lista;
     }
 
     public async Task<PedidoVendaRetornoDTO> ObterPorDocumentoEntrada(int documentoEntrada)
-    {
-        var pedidoVenda = await ObterPedidoVendaPorCodigo(documentoEntrada);
-        return pedidoVenda;
-    }
+        => await ObterPedidoVendaPorCodigo(documentoEntrada);
 
     public async Task<PedidoVendaRetornoDTO> Criar(PedidoVendaDTO pedidoVendaDTO)
     {
+        var anexoRetorno = new AnexoRetorno();
+        if (pedidoVendaDTO.Anexos.Count > 0)
+        {
+            anexoRetorno = await _anexoService.Criar(pedidoVendaDTO.Anexos);
+            pedidoVendaDTO.CodigoAnexo = anexoRetorno.AbsoluteEntry;
+        }
+            
         var pedidoSap = MapearParaSap(pedidoVendaDTO);
         var retornoSap = await _sapBase.CriarRegistro<PedidoVendaRetorno>(SAPRotas.PedidoVendas, pedidoSap);
-        return await MapearParaDTO(retornoSap);
+        return await MapearParaDTO(retornoSap, anexoRetorno);
     }
 
     public async Task<PedidoVendaRetornoDTO> Editar(int codigo, PedidoVendaEdicaoDTO pedidoVendaEdicaoDTO)
@@ -95,6 +98,7 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
             BPL_IDAssignedToInvoice = pedidoVendaDTO.Empresa,
             ContactPersonCode = pedidoVendaDTO.PessoaContato,
             NumAtCard = pedidoVendaDTO.NumeroReferenciaCliente,
+            AttachmentEntry = pedidoVendaDTO.CodigoAnexo,
             DocumentLines = [.. pedidoVendaDTO.Itens.Select(item => new PedidoVendaItem
             {
                 ItemCode = item.Item,
@@ -112,8 +116,8 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
             DocDueDate = pedidoVendaEdicaoDTO.DataEntrega,
             ContactPersonCode = pedidoVendaEdicaoDTO.PessoaContato,
             NumAtCard = pedidoVendaEdicaoDTO.NumeroReferenciaCliente,
-            DocumentLines = pedidoVendaEdicaoDTO.Itens?
-            .Select(item => new PedidoVendaItemEdicao
+            DocumentLines = pedidoVendaEdicaoDTO.Itens?.Select(item => 
+            new PedidoVendaItemEdicao
             {
                 ItemCode = item.Item,
                 LineNum = item.Linha,
@@ -125,11 +129,22 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
         };
     }
 
-    private async Task<PedidoVendaRetornoDTO> MapearParaDTO(PedidoVendaRetorno pedidoVendaRetorno)
+    private async Task<PedidoVendaRetornoDTO> MapearParaDTO(PedidoVendaRetorno pedidoVendaRetorno, AnexoRetorno? anexoRetorno)
     {
         var retornarDadosContato = await _parceiroNegocioService.RetornarPessoasContatoPorCodigo(pedidoVendaRetorno.ContactPersonCode);
 
-        return new PedidoVendaRetornoDTO
+        var anexos = anexoRetorno?.Attachments2_Lines?.Select(anexo => new AnexoPedidoRetornoDTO
+        {
+            Codigo = anexo.AbsoluteEntry,
+            Linha = anexo.LineNum,
+            NomeArquivo = anexo.FileName,
+            CaminhoDestino = anexo.SourcePath,
+            ExtensaoArquivo = anexo.FileExtension,
+            Tamanho = anexo.FileSize
+        })
+        .ToList();
+
+        var pedidoVenda = new PedidoVendaRetornoDTO
         {
             Cliente = pedidoVendaRetorno.CardName,
             CodigoCliente = pedidoVendaRetorno.CardCode,
@@ -152,8 +167,11 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
                 Imposto = documento.TaxCode,
                 Preco = documento.UnitPrice,
                 Quantidade = documento.Quantity
-            })]
+            })],
+            Anexos = anexos ?? []
         };
+
+        return pedidoVenda;
     }
 
     private async Task<PedidoVendaRetornoDTO> ObterPedidoVendaPorCodigo(int codigo)
@@ -212,8 +230,7 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
                                           .FirstOrDefault();
 
         if(pedidoVenda?.CodigoAnexo is not null)
-            pedidoVenda.Anexos = await ObterAnexos((int)pedidoVenda.CodigoAnexo);
-
+            pedidoVenda.Anexos = await _anexoService.ObterAnexos((int)pedidoVenda.CodigoAnexo);
 
         return pedidoVenda is null ? new PedidoVendaRetornoDTO() : pedidoVenda;
     }
@@ -307,34 +324,6 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
         return (query.ToString(), parametros);
     }
 
-    private async Task<List<AnexoPedidoRetornoDTO>> ObterAnexos(int codigoAnexo)
-    {
-        var query = @"SELECT 
-	                       T0.""Line"" AS ""LinhaAnexo"",
-	                       T0.""srcPath"" AS ""CaminhoDestino"",
-	                       T0.""trgtPath"" AS ""CaminhoSubPasta"",
-	                       T0.""FileName"" AS ""NomeArquivo"",
-	                       T0.""FileExt"" AS ""ExtensaoArquivo""
-                      FROM
-	                      ATC1 T0
-                      WHERE
-	                      T0.""AbsEntry"" = ?";
-
-        var parametros = new List<OdbcParameter> { new() { Value = codigoAnexo } };
-        
-        var anexos = await _sapBase.QueryParam(query, parametros, 
-            r => new AnexoPedidoRetornoDTO
-            {
-                Linha = r.GetInt32(0),
-                CaminhoDestino = r.GetString(1),
-                CaminhoSubPasta = r.GetString(2),
-                NomeArquivo = r.GetString(3),
-                ExtensaoArquivo = r.GetString(4)
-            });
-
-        return anexos;
-    }
-    
     private async Task<Decimal> RetornarValorTotalItens(int documentoEntrada)
     {
         var query = @"SELECT ""Price"" FROM RDR1 WHERE ""DocEntry"" = ? AND ""LineStatus"" = 'O' ";

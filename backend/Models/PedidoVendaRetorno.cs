@@ -13,6 +13,7 @@ public class PedidoVendaRetorno
     public int ContactPersonCode { get; set; }
     public double DocTotal { get; set; }
     public int BPL_IDAssignedToInvoice { get; set; }
+    public int? attachmentEntry { get; set; }
     public List<PedidoVendaItemRetorno> DocumentLines { get; set; } = [];
     
 }
