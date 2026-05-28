@@ -85,7 +85,7 @@ export function AnexoProvider({  children}: Props) {
                 caminhoDestino: anexo?.caminhoPastaAnexo ?? "",
                 nomeArquivo: nome,
                 extensaoArquivo: extensao,
-                tamanhoArquivo: arquivo.size,
+                tamanhoArquivo: Math.floor(arquivo.size / 1024),
             };
         });
 

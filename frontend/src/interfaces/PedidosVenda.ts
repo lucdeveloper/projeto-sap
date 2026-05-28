@@ -68,6 +68,8 @@ export interface AnexoPedidoRetornoDTO {
   nomeArquivo: string;
   extensaoArquivo: string;
   tamanho: number;
+  dataAnexo: string;
+  usuarioResponsavel: string;
 }
 
 export interface PedidoVendaRetornoDTO {

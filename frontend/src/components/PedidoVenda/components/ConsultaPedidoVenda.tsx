@@ -36,7 +36,7 @@ export function ConsultaPedidoVenda() {
   const {pedidos, loadings, carregarPedidosVenda, filtrosSalvos, setFiltrosSalvos, inputCliente, setInputCliente,inputDocumento, setInputDocumento, carregarPorDocumentoEntrada } = usePedidosVenda();
 
   const tabelaPedidosVenda = useMemo(() => [
-      { Header: "Nº Documento",  accessor: "numeroDocumento" },
+      { Header: "Nº Documento",  accessor: "documento" },
       {
         Header: "Código Cliente",
         accessor: "codigoCliente",
@@ -75,15 +75,35 @@ export function ConsultaPedidoVenda() {
           });
         }
       },
-      { Header: "Status", accessor: "status" }
-           
+      { Header: "Status", accessor: "status" },
+      {
+        Header: "",
+        accessor: "acoes",
+        width: 50,
+        maxWidth: 50,
+        disableSortBy: true,
+        Cell: (instance: any) => {
+          const pedido = instance.row.original;
+
+          return (
+            <Button
+              design="Transparent"
+              icon="slim-arrow-right"
+              onClick={(e: any) => {
+                e.stopPropagation();
+                enviarPedidoAtualizacao(pedido.numeroDocumento);
+              }}
+            />
+          );
+        }
+      }          
   ], []);
     
   const tabelaClientes = [
     { Header: "Código do PN", accessor: "codigoCliente" },
     { Header: "Nome do PN", accessor: "nomeCliente" },
     { Header: "Saldo do parceiro de negócios", accessor: "saldoTotal" },
-    { Header: "Moeda", accessor: "moeda" }
+    { Header: "Moeda", accessor: "moeda" },
   ]
 
   /* Componentes de parceiros de negocio */
@@ -182,7 +202,7 @@ export function ConsultaPedidoVenda() {
             }}
             filters={
               <>
-                <FilterGroupItem label="Código do PN" filterKey="codigo">
+                  <FilterGroupItem label="Código do PN" filterKey="codigo">
                     <MultiInput
                         showValueHelpIcon
                         value={inputCodigoParceiroNegocio}
@@ -280,31 +300,31 @@ export function ConsultaPedidoVenda() {
               showGoOnFB 
               hideFilterConfiguration 
               onGo={() => carregarPedidosVenda()}
-            >
+            > 
               <FilterGroupItem filterKey="documentos" label="Nº do documento">
-                <MultiInput
-                  showValueHelpIcon
-                  value={inputDocumento}
-                  tokens={filtrosSalvos.documentos.map((codigo) => (
-                    <Token key={codigo} text={codigo.toString()} />
-                  ))}
-                  onInput={(e: any) => setInputDocumento(e.target.value)}
-                  onKeyDown={(e: any) => {
-                    if (e.key === "Enter") {
-                      const value = Number(inputDocumento.trim());
-                      if (!value) return;
-                      if (!filtrosSalvos.documentos.includes(value)) {
-                        atualizarFiltro("documentos", [...filtrosSalvos.documentos, value]);
-                      }
-                      setInputDocumento("");
-                    }
-                  }}
-                  onTokenDelete={(e: any) => {
-                    const tokensRemovidos = e.detail.tokens;
-                    const novaLista = filtrosSalvos.documentos.filter((documento) => !tokensRemovidos.some((t: any) => t.text === documento));
-                    atualizarFiltro("documentos", novaLista);         
-                  }}
-                  />
+                      <MultiInput
+                            showValueHelpIcon
+                            value={inputDocumento}
+                            tokens={filtrosSalvos.documentos.map((codigo) => (
+                              <Token key={codigo} text={codigo.toString()} />
+                            ))}
+                            onInput={(e: any) => setInputDocumento(e.target.value)}
+                            onKeyDown={(e: any) => {
+                              if (e.key === "Enter") {
+                                const value = Number(inputDocumento.trim());
+                                if (!value) return;
+                                if (!filtrosSalvos.documentos.includes(value)) {
+                                  atualizarFiltro("documentos", [...filtrosSalvos.documentos, value]);
+                                }
+                                setInputDocumento("");
+                              }
+                            }}
+                            onTokenDelete={(e: any) => {
+                              const tokensRemovidos = e.detail.tokens;
+                              const novaLista = filtrosSalvos.documentos.filter((documento) => !tokensRemovidos.some((t: any) => Number(t.text) === documento));
+                              atualizarFiltro("documentos", novaLista);         
+                            }}
+                        />
               </FilterGroupItem>
               
               <FilterGroupItem filterKey="clientes" label="Código do cliente">

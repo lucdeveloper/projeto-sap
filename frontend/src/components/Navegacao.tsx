@@ -6,8 +6,9 @@ import { Outlet, useNavigate } from "react-router-dom";
 export function Navegacao( ) {
    const [hideMenu, setHideMenu] = useState(true);
    const navigate = useNavigate();
+   const exibirBotaoVoltar = location.pathname !== "/";
 
-   const menu = [
+    const menu = [
         {
             id: 1,
             label: "Configuração de anexo",
@@ -62,7 +63,15 @@ export function Navegacao( ) {
                         showNotifications
                         startButton={
                             <>
-                                <Button accessibleName="Back" icon="nav-back" tooltip="Back" onClick={() => navigate(-1)}/>
+                                {exibirBotaoVoltar && (
+                                    <Button
+                                        accessibleName="Back"
+                                        icon="nav-back"
+                                        tooltip="Back"
+                                        onClick={() => navigate(-1)}
+                                    />
+                                )}
+                                
                                 <Button icon="menu" onClick={() => setHideMenu(prev => !prev)}/>
                             </>
                         }

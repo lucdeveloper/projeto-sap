@@ -8,7 +8,7 @@ export function usePedidosVenda() {
     const [pedidos, setPedidos] = useState<PedidosVendaDTO[]>([]);
     const [pedido, setPedido] = useState<PedidosVendaDTO>();
     const [pedidoEdicao, setPedidoEdicao] = useState<PedidoVendaRetornoDTO>();
-    const [filtrosSalvos, setFiltrosSalvos] = useState<FiltrosPedidosVenda>({ clientes: [], status: [], documentos:[] });
+    const [filtrosSalvos, setFiltrosSalvos] = useState<FiltrosPedidosVenda>({ clientes: [], status: [], documentos: [] });
     const [inputCliente, setInputCliente] = useState("");
     const [inputDocumento, setInputDocumento] = useState("");
 
@@ -97,8 +97,9 @@ export function usePedidosVenda() {
 
     const resetBuscaPedidos = () => {
         setPedidos([]);
-        setFiltrosSalvos({ clientes: [], status: [], documentos:[] });
+        setFiltrosSalvos({ clientes: [], status: [], documentos: [] });
         setInputCliente("");
+        setInputDocumento("");
     };
 
     return { 

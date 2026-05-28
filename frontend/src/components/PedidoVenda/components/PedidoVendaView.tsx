@@ -230,6 +230,8 @@ return (
                         <TableHeaderCell minWidth="100px"><span>Nome do arquivo</span></TableHeaderCell>
                         <TableHeaderCell minWidth="100px"><span>Extensão do arquivo</span></TableHeaderCell>
                         <TableHeaderCell minWidth="100px"><span>Tamanho do arquivo</span></TableHeaderCell>
+                        <TableHeaderCell minWidth="100px"><span>Data anexo</span></TableHeaderCell>
+                        <TableHeaderCell minWidth="100px"><span>Anexado por</span></TableHeaderCell>
                     </TableHeaderRow>}
                         >
                             {dados?.anexos?.map((item, index) => (
