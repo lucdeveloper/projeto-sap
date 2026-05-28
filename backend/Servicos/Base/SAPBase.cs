@@ -57,11 +57,11 @@ public class SAPBase(HttpClient httpClient, IOptions<SAPConfiguracoes> configura
         return objeto ?? throw new Exception(resultado);
     }
 
-    public async Task AtualizarRegistro(string url, object data, bool replaceCollectionsOnPatch = false)
+    public async Task AtualizarRegistro(string url, object data, bool replaceCollectionsOnPatch = false, bool incluirNull = false)
     {
         HttpRequestMessage CriarRequisicao()
         {
-            var req = new HttpRequestMessage(new HttpMethod("PATCH"), url) { Content = CriarConteudo(data) };
+            var req = new HttpRequestMessage(new HttpMethod("PATCH"), url) { Content = CriarConteudo(data, incluirNull) };
             if (replaceCollectionsOnPatch) req.Headers.Add("B1S-ReplaceCollectionsOnPatch", "true");
             return req;
         }
@@ -160,9 +160,13 @@ public class SAPBase(HttpClient httpClient, IOptions<SAPConfiguracoes> configura
         return default;
     }
 
-    private StringContent CriarConteudo(object data)
+    private StringContent CriarConteudo(object data, bool incluirNull = false)
     {
-        var json = JsonConvert.SerializeObject(data, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+        var json = JsonConvert.SerializeObject(data, new JsonSerializerSettings 
+        { 
+            NullValueHandling = incluirNull ? NullValueHandling.Include : NullValueHandling.Ignore
+        });
+
         return new StringContent(json, Encoding.UTF8, "application/json");
     }
 }

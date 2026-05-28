@@ -1,4 +1,5 @@
-﻿using sap.Configuracoes;
+﻿using Microsoft.AspNetCore.Mvc;
+using sap.Configuracoes;
 using sap.DTO;
 using sap.Models;
 using sap.Servicos.Base;
@@ -59,7 +60,30 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
 
     public async Task<PedidoVendaRetornoDTO> Editar(int codigo, PedidoVendaEdicaoDTO pedidoVendaEdicaoDTO)
     {
-        var pedidoSap = MapearParaEdicaoSap(pedidoVendaEdicaoDTO);
+        if(pedidoVendaEdicaoDTO.CodigoAnexo.HasValue && pedidoVendaEdicaoDTO.Anexos.Count > 0)
+        {
+            await _anexoService.Editar(pedidoVendaEdicaoDTO.Anexos, (int)pedidoVendaEdicaoDTO.CodigoAnexo);
+        }
+        else if(pedidoVendaEdicaoDTO.CodigoAnexo.HasValue && pedidoVendaEdicaoDTO.Anexos.Count == 0)
+        {
+            await _anexoService.Editar(pedidoVendaEdicaoDTO.Anexos, pedidoVendaEdicaoDTO.CodigoAnexo.Value);
+            await _sapBase.AtualizarRegistro($"{SAPRotas.PedidoVendas}({codigo})", new { AttachmentEntry = (int?)null }, false, true);
+        }
+        else if (!pedidoVendaEdicaoDTO.CodigoAnexo.HasValue && pedidoVendaEdicaoDTO.Anexos.Count > 0)
+        {
+            var anexos = pedidoVendaEdicaoDTO.Anexos.Select((anexo) => new AnexoPedidoDTO
+            {
+                CaminhoDestino = anexo.CaminhoDestino,
+                ExtensaoArquivo = anexo.ExtensaoArquivo,
+                NomeArquivo = anexo.NomeArquivo,
+                TamanhoArquivo = anexo.TamanhoArquivo
+            }).ToList();
+
+            var anexo = await _anexoService.Criar(anexos);
+            pedidoVendaEdicaoDTO.CodigoAnexo = anexo.AbsoluteEntry;
+        }
+        
+        object pedidoSap = pedidoVendaEdicaoDTO.Anexos.Count > 0 ? MapearParaEdicaoAnexoSap(pedidoVendaEdicaoDTO): MapearParaEdicaoSap(pedidoVendaEdicaoDTO);
         
         /// <summary>
         /// Atualiza um Pedido de Venda no SAP Business One via Service Layer.
@@ -83,7 +107,7 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
         /// Esse comportamento altera o PATCH padrão para substituição de coleção.
         /// </remarks>
         await _sapBase.AtualizarRegistro($"{SAPRotas.PedidoVendas}({codigo})", pedidoSap, true);
-        
+
         var pedidoAtualizado = await ObterPedidoVendaPorCodigo(codigo);
         
         return pedidoAtualizado;
@@ -117,6 +141,27 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
             ContactPersonCode = pedidoVendaEdicaoDTO.PessoaContato,
             NumAtCard = pedidoVendaEdicaoDTO.NumeroReferenciaCliente,
             DocumentLines = pedidoVendaEdicaoDTO.Itens?.Select(item => 
+            new PedidoVendaItemEdicao
+            {
+                ItemCode = item.Item,
+                LineNum = item.Linha,
+                Quantity = item.Quantidade,
+                UnitPrice = item.Preco,
+                TaxCode = item.Imposto
+            })
+            .ToList()
+        };
+    }
+
+    private PedidoVendaAnexoEdicao MapearParaEdicaoAnexoSap(PedidoVendaEdicaoDTO pedidoVendaEdicaoDTO)
+    {
+        return new PedidoVendaAnexoEdicao
+        {
+            DocDueDate = pedidoVendaEdicaoDTO.DataEntrega,
+            ContactPersonCode = pedidoVendaEdicaoDTO.PessoaContato,
+            NumAtCard = pedidoVendaEdicaoDTO.NumeroReferenciaCliente,
+            AttachmentEntry = pedidoVendaEdicaoDTO.CodigoAnexo,
+            DocumentLines = pedidoVendaEdicaoDTO.Itens?.Select(item =>
             new PedidoVendaItemEdicao
             {
                 ItemCode = item.Item,

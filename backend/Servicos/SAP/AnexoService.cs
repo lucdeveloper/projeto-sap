@@ -58,18 +58,16 @@ public class AnexoService(SAPBase sapBase)
         var retornoSap = await _sapBase.CriarRegistro<AnexoRetorno>(SAPRotas.Anexo, anexoSap);
         return retornoSap;
     }
-    
-    public async Task<AnexoConsultaDTO> Editar(AnexoConsultaDTO anexo)
+
+    public async Task Editar(List<AnexoPedidoEdicaoDTO> anexos, int codigoAnexo)
     {
-        var query = MontarQuery();
+        var anexoSap = MapearParaSapEdicao(anexos);
+        await _sapBase.AtualizarRegistro($"{SAPRotas.Anexo}({codigoAnexo})", anexoSap, true);
+    }
 
-        var dadosAnexo = await _sapBase.QuerySingle(query, null,
-                r => new AnexoConsultaDTO
-                {
-                    CaminhoPastaAnexo = r.GetString(0)
-                });
-
-        return dadosAnexo is null ? new AnexoConsultaDTO() : dadosAnexo;
+    public async Task<AnexoConsultaDTO> EditarDiretorioPadrao(AnexoConsultaDTO anexo)
+    {
+        return  new AnexoConsultaDTO();
     }
 
     public async Task<List<AnexoPedidoRetornoDTO>> ObterAnexos(int codigoAnexo)
@@ -148,8 +146,28 @@ public class AnexoService(SAPBase sapBase)
         var anexo = new AnexoCriacao
         {
             Attachments2_Lines = [.. anexos.Select(anexo =>
-                new Anexo
+                new AnexoLinhaCriacao
                 {
+                    FileName = anexo.NomeArquivo,
+                    FileExtension = anexo.ExtensaoArquivo,
+                    SourcePath = anexo.CaminhoDestino,
+                    FileSize =  anexo.TamanhoArquivo,
+                    UserID = 1
+                }
+            )]
+        };
+
+        return anexo;
+    }
+
+    private AnexoEdicao MapearParaSapEdicao(List<AnexoPedidoEdicaoDTO> anexos)
+    {
+        var anexo = new AnexoEdicao
+        {
+            Attachments2_Lines = [.. anexos.Select(anexo =>
+                new AnexoLinhaEdicao
+                {
+                    LineNum = anexo.Linha,
                     FileName = anexo.NomeArquivo,
                     FileExtension = anexo.ExtensaoArquivo,
                     SourcePath = anexo.CaminhoDestino,
