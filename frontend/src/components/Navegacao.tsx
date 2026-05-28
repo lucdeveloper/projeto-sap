@@ -1,25 +1,51 @@
-import { Avatar, Button, NavigationLayout, ShellBar, SideNavigation , SideNavigationItem } from "@ui5/webcomponents-react";
+import { Avatar, Button, NavigationLayout, ShellBar, SideNavigation , SideNavigationItem, SideNavigationSubItem } from "@ui5/webcomponents-react";
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
 
 export function Navegacao( ) {
-   const [hideMenu, setHideMenu] = useState(false);
+   const [hideMenu, setHideMenu] = useState(true);
    const navigate = useNavigate();
 
-    const menu = [
-        { id: 1, label: "Configuração de anexo", path: "/anexo", icon: "enablement" },
-        { id: 2, label: "Pedidos de venda", path: "/", icon: "sales-quote" }
+   const menu = [
+        {
+            id: 1,
+            label: "Configuração de anexo",
+            path: "/anexo",
+            icon: "enablement"
+        },
+        {
+            id: 2,
+            label: "Vendas",
+            icon: "sales-quote",
+            children: [
+                {
+                    id: 3,
+                    label: "Pedidos de venda",
+                    path: "/"
+                },
+                {
+                    id: 4,
+                    label: "Criar pedido de venda",
+                    path: "/pedido-venda"
+                }
+            ]
+        }
     ];
 
     return(
         <div
-            style={{
-                height: '100%',
-                position: 'relative'
+           style={{
+                height: '100vh',
+                width: '100vw',
+                position: 'relative',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column'
             }}
             >
             <NavigationLayout
+                style={{ height: '100%' }}
                 header={
                     <ShellBar
                         logo={<img alt="SAP Logo" src="https://ui5.github.io/webcomponents/images/sap-logo-svg.svg" /> }    
@@ -35,22 +61,36 @@ export function Navegacao( ) {
                         }
                         showNotifications
                         startButton={
-                            <Button icon="menu" onClick={() => setHideMenu(prev => !prev)}/>
+                            <>
+                                <Button accessibleName="Back" icon="nav-back" tooltip="Back" onClick={() => navigate(-1)}/>
+                                <Button icon="menu" onClick={() => setHideMenu(prev => !prev)}/>
+                            </>
                         }
                     />
                 }
                 sideContent={
                     !hideMenu && (
                         <SideNavigation slot="sideContent">
-                            { menu.map(item => (
+                            {menu.map(item => (
                                 <SideNavigationItem
-                                key={item.id}
+                                    key={item.id}
                                     icon={item.icon}
                                     text={item.label}
-                                    onClick={() => navigate(item.path)}
-                                    />
-                                ))
-                            }
+                                    onClick={() => {
+                                        if (!item.children) {
+                                            navigate(item.path);
+                                        }
+                                    }}
+                                >
+                                    {item.children?.map(subItem => (
+                                        <SideNavigationSubItem
+                                            key={subItem.id}
+                                            text={subItem.label}
+                                            onClick={() => navigate(subItem.path)}
+                                        />
+                                    ))}
+                                </SideNavigationItem>
+                            ))}
                         </SideNavigation>
                     )
                 }

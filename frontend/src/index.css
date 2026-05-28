@@ -1,4 +1,13 @@
 html, body, #root {
-  height: 100%;
   margin: 0;
+  padding: 0;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+.ui5-content-density-cozy, 
+[data-ui5-slot] {
+  height: 100%;
+  overflow: hidden;
 }
