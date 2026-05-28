@@ -2,6 +2,7 @@
 {
     public class PedidoVendaConsultaDTO
     {
+        public int Documento { get; set; }
         public int NumeroDocumento { get; set; }
         public string CodigoCliente { get; set; } = string.Empty;
         public string NomeCliente { get; set; } = string.Empty;

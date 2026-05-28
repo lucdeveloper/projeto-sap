@@ -28,12 +28,13 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
         var lista = await _sapBase.QueryParam(dadosConsulta.Item1, dadosConsulta.Item2,
                 r => new PedidoVendaConsultaDTO
                 {
-                    NumeroDocumento = r.GetInt32(0),
-                    CodigoCliente = r.GetString(1),
-                    NomeCliente = r.GetString(2),
-                    NumeroReferenciaCliente = r.IsDBNull(3) ? string.Empty : r.GetString(3),
-                    DataLancamento = r.GetDateTime(4).ToString("dd/MM/yyyy"),
-                    DataEntrega = r.GetDateTime(5).ToString("dd/MM/yyyy"),
+                    Documento = r.GetInt32(0),
+                    NumeroDocumento = r.GetInt32(1),
+                    CodigoCliente = r.GetString(2),
+                    NomeCliente = r.GetString(3),
+                    NumeroReferenciaCliente = r.IsDBNull(4) ? string.Empty : r.GetString(4),
+                    DataLancamento = r.GetDateTime(5).ToString("dd/MM/yyyy"),
+                    DataEntrega = r.GetDateTime(6).ToString("dd/MM/yyyy"),
                     Status = r.GetString(7) == "O" ? "Aberto" : "Fechado"
                 });
 
@@ -293,7 +294,8 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
     {
         var query = new StringBuilder(@"
                           SELECT
-	                          ""DocEntry"" AS ""NumeroDocumento"",
+                              ""DocNum"" AS ""Documento"",	                          
+                              ""DocEntry"" AS ""NumeroDocumento"",
 	                          ""CardCode"" AS ""CodigoCLiente"",
 	                          ""CardName"" AS ""NomeCliente"",
 	                          ""NumAtCard"" AS ""NumeroReferenciaCliente"",
@@ -307,7 +309,7 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
 
         var parametros = new List<OdbcParameter>();
 
-        CriarFiltro(query, "DocEntry", filtros.Documentos, parametros);
+        CriarFiltro(query, "DocNum", filtros.Documentos, parametros);
         CriarFiltro(query, "CardCode", filtros.Clientes, parametros);
         CriarFiltro(query, "DocStatus", filtros.Status, parametros);
 
@@ -318,7 +320,7 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
             parametros.Add(new OdbcParameter { Value = data });
         }
         
-        query.Append($@" ORDER BY ""DocEntry"" DESC LIMIT 20");
+        query.Append($@" ORDER BY ""DocNum"" DESC LIMIT 20");
 
         return (query.ToString(), parametros);
 
