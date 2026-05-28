@@ -8,8 +8,9 @@ export function usePedidosVenda() {
     const [pedidos, setPedidos] = useState<PedidosVendaDTO[]>([]);
     const [pedido, setPedido] = useState<PedidosVendaDTO>();
     const [pedidoEdicao, setPedidoEdicao] = useState<PedidoVendaRetornoDTO>();
-    const [filtrosSalvos, setFiltrosSalvos] = useState<FiltrosPedidosVenda>({ clientes: [], status: [] });
+    const [filtrosSalvos, setFiltrosSalvos] = useState<FiltrosPedidosVenda>({ clientes: [], status: [], documentos:[] });
     const [inputCliente, setInputCliente] = useState("");
+    const [inputDocumento, setInputDocumento] = useState("");
 
     const carregarProximoCodigo = async () => {
         setLoadings(prev => ({ ...prev, proximoCodigo: true }));
@@ -43,17 +44,21 @@ export function usePedidosVenda() {
         setLoadings(prev => ({ ...prev, pedidos: true }));
     
         let finalClientes: string[];
+        let finalDocumentos: number[];
         let statusBusca = filtros?.status ?? filtrosSalvos.status
     
         if (filtros) {
             finalClientes = filtros.clientes;
+            finalDocumentos = filtros.documentos;
         } else {
             const pendenteCliente = inputCliente.trim();
             finalClientes = [...new Set([...filtrosSalvos.clientes, ...(pendenteCliente ? [pendenteCliente] : [])])];
+             const pendenteDocumentos = Number(inputDocumento.trim());
+            finalDocumentos = [...new Set([...filtrosSalvos.documentos, ...(pendenteDocumentos ? [pendenteDocumentos] : [])])];
         }
     
         try {
-            const data = await pedidoVendaService.listar({ clientes: finalClientes, status: statusBusca });
+            const data = await pedidoVendaService.listar({ clientes: finalClientes, status: statusBusca, documentos: finalDocumentos });
             setPedidos(data);
         } catch (error) {
             console.error("Erro ao carregar pedidos de venda:", error);
@@ -92,7 +97,7 @@ export function usePedidosVenda() {
 
     const resetBuscaPedidos = () => {
         setPedidos([]);
-        setFiltrosSalvos({ clientes: [], status: [] });
+        setFiltrosSalvos({ clientes: [], status: [], documentos:[] });
         setInputCliente("");
     };
 
@@ -107,6 +112,8 @@ export function usePedidosVenda() {
         setFiltrosSalvos,
         inputCliente, 
         setInputCliente,
+        inputDocumento,
+        setInputDocumento,
         criarPedidoVenda,
         pedido,
         setProximoCodigo,

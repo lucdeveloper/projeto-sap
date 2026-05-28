@@ -33,7 +33,7 @@ import { STATUS_PEDIDO_OPTIONS } from "../../../constants/pedidoVenda.ts";
 export function ConsultaPedidoVenda() {
   const navigate = useNavigate();
   const { abrirCliente, popoverProps } = useClientePopover();
-  const {pedidos, loadings, carregarPedidosVenda, filtrosSalvos, setFiltrosSalvos, inputCliente, setInputCliente, carregarPorDocumentoEntrada } = usePedidosVenda();
+  const {pedidos, loadings, carregarPedidosVenda, filtrosSalvos, setFiltrosSalvos, inputCliente, setInputCliente,inputDocumento, setInputDocumento, carregarPorDocumentoEntrada } = usePedidosVenda();
 
   const tabelaPedidosVenda = useMemo(() => [
       { Header: "Nº Documento",  accessor: "numeroDocumento" },
@@ -89,6 +89,7 @@ export function ConsultaPedidoVenda() {
   /* Componentes de parceiros de negocio */
   const [openCliente, setOpenCliente] = useState(false);
   const [selectedClientes, setSelectedClientes] = useState<any[]>([]);
+  const [linhasVisiveis, setLinhasVisiveis] = useState(7);
       
   const {
     parceirosNegocio, 
@@ -116,7 +117,7 @@ export function ConsultaPedidoVenda() {
   },[pedidos]);
 
   useEffect(() => {
-    const filtrosIniciais: FiltrosPedidosVenda = { clientes: [], status: [] };
+    const filtrosIniciais: FiltrosPedidosVenda = { clientes: [], status: [], documentos: [] };
     carregarPedidosVenda(filtrosIniciais);
   }, []);
 
@@ -140,6 +141,20 @@ export function ConsultaPedidoVenda() {
         console.error("Erro ao carregar pedido para visualização:", error);
       }         
   }
+
+  useEffect(() => {
+    function atualizarLinhasPorAltura() {
+      if (window.innerHeight > 900) {
+        setLinhasVisiveis(11);
+      } else {
+        setLinhasVisiveis(7);
+      }
+    }
+
+    atualizarLinhasPorAltura();
+    window.addEventListener("resize", atualizarLinhasPorAltura);
+    return () => window.removeEventListener("resize", atualizarLinhasPorAltura);
+  }, []);
 
   return (
     <>
@@ -197,7 +212,6 @@ export function ConsultaPedidoVenda() {
                             }));
                         }}      
                   />
-                      
                   </FilterGroupItem>
 
                   <FilterGroupItem label="Nome do PN" filterKey="nome">
@@ -249,13 +263,11 @@ export function ConsultaPedidoVenda() {
                     setSelectedClientes(linhasSelecionadas);
                   }}
                />
-
       </DialogSelecao>
         
       <DynamicPage
         style={{
-          height: "100vh",
-          overflow: "hidden",
+          height: "100%",
           background: "var(--sapBackgroundColor)"
         }}
         hidePinButton
@@ -263,13 +275,39 @@ export function ConsultaPedidoVenda() {
           <DynamicPageHeader>
             <FilterBar
               filterContainerWidth="13.125rem" 
-              header={<Title level="H2" size="H4">FilterBar</Title>} 
+              header={<Title level="H2" size="H4">Filtros</Title>} 
               hideToolbar 
               showGoOnFB 
               hideFilterConfiguration 
               onGo={() => carregarPedidosVenda()}
             >
-              <FilterGroupItem filterKey="clientes" label="Cliente">
+              <FilterGroupItem filterKey="documentos" label="Nº do documento">
+                <MultiInput
+                  showValueHelpIcon
+                  value={inputDocumento}
+                  tokens={filtrosSalvos.documentos.map((codigo) => (
+                    <Token key={codigo} text={codigo.toString()} />
+                  ))}
+                  onInput={(e: any) => setInputDocumento(e.target.value)}
+                  onKeyDown={(e: any) => {
+                    if (e.key === "Enter") {
+                      const value = Number(inputDocumento.trim());
+                      if (!value) return;
+                      if (!filtrosSalvos.documentos.includes(value)) {
+                        atualizarFiltro("documentos", [...filtrosSalvos.documentos, value]);
+                      }
+                      setInputDocumento("");
+                    }
+                  }}
+                  onTokenDelete={(e: any) => {
+                    const tokensRemovidos = e.detail.tokens;
+                    const novaLista = filtrosSalvos.documentos.filter((documento) => !tokensRemovidos.some((t: any) => t.text === documento));
+                    atualizarFiltro("documentos", novaLista);         
+                  }}
+                  />
+              </FilterGroupItem>
+              
+              <FilterGroupItem filterKey="clientes" label="Código do cliente">
                 <MultiInput
                   showValueHelpIcon
                   value={inputCliente}
@@ -312,6 +350,7 @@ export function ConsultaPedidoVenda() {
                   ))}
                 </MultiComboBox>
               </FilterGroupItem>
+
             </FilterBar>
           </DynamicPageHeader>
         }
@@ -327,31 +366,36 @@ export function ConsultaPedidoVenda() {
           />
         }
       >
-        <div style={{ padding: "1rem" }}>
+        <div style={{ 
+          height: "100%", 
+          boxSizing: "border-box", 
+          padding: "0.5rem 1rem 1rem 1rem",
+          display: "flex",
+          flexDirection: "column"
+        }}>
           <div
             style={{
               background: "var(--sapGroup_ContentBackground)",
-              padding: "1rem",
+              padding: "0.75rem 1rem",
               borderRadius: "8px",
+              display: "flex",       
+              flexDirection: "column", 
+              flex: 1,                 
+              overflow: "hidden"
             }}
           >
-            <FlexBox justifyContent="SpaceBetween">
-            <Title level="H5">
-              Pedidos de vendas
-            </Title>
-            <Button
-              design="Transparent"
-              onClick={() => navigate("/pedido-venda")}
-            >
-            Criar
-             </Button>
+            <FlexBox justifyContent="SpaceBetween" style={{ marginBottom: "0.5rem" }}>
+              <Title level="H5">Pedidos de vendas</Title>
+              <Button design="Transparent" onClick={() => navigate("/pedido-venda")}>
+                Criar
+              </Button>
             </FlexBox>
 
-            <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-
-            <AnalyticalTable
+            <div style={{ flex: 1, overflow: "hidden" }}>
+              <AnalyticalTable
                 sortable
-                visibleRows={10}
+                visibleRows={linhasVisiveis} 
+                minRows={linhasVisiveis}
                 selectionBehavior="RowSelector"
                 loading={loadings.pedidos}
                 columns={tabelaPedidosVenda}
@@ -364,10 +408,9 @@ export function ConsultaPedidoVenda() {
                     }
                 }}
               />
-
             </div>
 
-            <FlexBox justifyContent="End" style={{ marginTop: "1rem" }}>
+            <FlexBox justifyContent="End" style={{ marginTop: "0.5rem" }}>
               <Title level="H5">
                 Total:{" "}
                 {totalPedidos.toLocaleString("pt-BR", {
@@ -380,11 +423,7 @@ export function ConsultaPedidoVenda() {
         </div>
       </DynamicPage>
 
-      <PopoverView
-        texto={"Parceiro de negócios"}
-        {...popoverProps}
-      >
-      </PopoverView>
+      <PopoverView texto={"Parceiro de negócios"} {...popoverProps} />
     </>
   );
 }

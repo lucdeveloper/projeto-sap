@@ -12,7 +12,8 @@ export interface PedidosVendaDTO {
 
 export interface FiltrosPedidosVenda{
     clientes: string[],
-    status: string[]
+    status: string[],
+    documentos: number[],
 }
 
 export interface ItemPedido {
@@ -83,6 +84,7 @@ export interface PedidoVendaRetornoDTO {
   pessoaContato: string;
   emailContato: string;
   empresa: number;
+  codigoAnexo?: number;
   itens: ItemPedidoRetornoDTO[];
   anexos: AnexoPedidoRetornoDTO[];
 }
@@ -96,9 +98,19 @@ export interface ItemPedidoEdicao {
   excluir?: boolean
 }
 
+export interface AnexoPedidoEdicao {
+  linha?: number;
+  caminhoDestino: string;
+  nomeArquivo: string;
+  extensaoArquivo: string;
+  tamanhoArquivo: number;
+}
+
 export interface PedidoVendaEdicao {
   pessoaContato: number | null;
   numeroReferenciaCliente: string;
   dataEntrega: string;
+  codigoAnexo?: number;
   itens: ItemPedidoEdicao[];
+  anexos: AnexoPedidoEdicao[];
 }

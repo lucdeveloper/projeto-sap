@@ -21,7 +21,7 @@ type AnexoContextData = {
     setMensagem: (mensagem?: string) => void;
     carregarAnexo: () => Promise<void>;
     consultaPorCodigo: ( codigo: number, numeroLinha: number) => Promise<string | undefined>;
-    uploadAnexo: ( arquivo: File ) => Promise<void>; 
+    uploadAnexo: ( arquivo: File[] ) => Promise<void>; 
     arquivosUpload: AnexoPedido[];
     setArquivosUpload: (arquivos: AnexoPedido[]) => void;
     removerAnexos: (indexes: number[]) => void;
@@ -73,24 +73,26 @@ export function AnexoProvider({  children}: Props) {
         }
     };
 
-    const uploadAnexo = async (arquivo: File) => {
+    const uploadAnexo = async (arquivos: File[]) => {
 
         try {
 
+            const novosArquivos: AnexoPedido[] = arquivos.map((arquivo) => {
             const nome = arquivo.name.split(".")[0];
             const extensao = arquivo.name.split(".").pop() ?? "";
 
-            const novoArquivo: AnexoPedido = {
+            return {
                 caminhoDestino: anexo?.caminhoPastaAnexo ?? "",
                 nomeArquivo: nome,
                 extensaoArquivo: extensao,
                 tamanhoArquivo: arquivo.size,
             };
+        });
 
-            setArquivosUpload(prev => [
-                ...prev,
-                novoArquivo
-            ]);
+        setArquivosUpload(prev => [
+            ...prev,
+            ...novosArquivos
+        ]);
 
         } catch {
             setMensagem("Erro ao adicionar arquivo.");

@@ -22,14 +22,13 @@ import {
     Button,
     BusyIndicator
 } from '@ui5/webcomponents-react';
-import { BarraNavegacao } from "../../BarraNavegacao.tsx";
 import { PedidoVendaRetornoDTO } from '../../../interfaces/PedidosVenda.ts';
 import { useClientePopover } from '../../../hooks/Popover/useClientePopover.ts';
 import { PopoverView } from '../../PopoverView.tsx';
 import { formatarDataBR } from '../../../utils/dateUtils.ts'
 import { formatarMoedaBR } from '../../../utils/currencyUtils.ts';
 import { useItemPopover } from '../../../hooks/Popover/useItemPopover.ts';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { DialogMensagem } from '../../DialogMensagem.tsx';
 import { AnexoIconeHelper } from '../../../utils/anexoHelper.ts';
 import { useAnexoContext } from '../../../contexts/anexoContext.tsx';
@@ -55,16 +54,8 @@ export function PedidoVendaView({ dados, onNovoPedido, onEditar }: PedidoVendaVi
         }, 0);
     }, [dados?.itens]);
 
-    useEffect(() => {
-        console.log(dados)
-    },[])
-    
 return (
     <>
-        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-        
-        <BarraNavegacao />
-
         <ObjectPage
             mode= "IconTabBar"
             headerPinned
@@ -275,8 +266,6 @@ return (
 
         </ObjectPage>
         
-        </div> 
-    
         <PopoverView
             texto={"Parceiro de negócios"}
             {...clienteProps}
