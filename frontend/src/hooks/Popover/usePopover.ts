@@ -5,9 +5,7 @@ export function usePopover<T>() {
     const [anchor, setAnchor] = useState<HTMLElement | string | null | undefined>(null);
     const [isOpen, setIsOpen] = useState(false);
 
-    const open = (evento: HTMLElement | string | null | undefined, conteudo: T) => {
-        /*  console.log(evento) */
-        
+    const open = (evento: HTMLElement | string | null | undefined, conteudo: T) => { 
         setAnchor(evento);
         setData(conteudo);
         setIsOpen(true);
