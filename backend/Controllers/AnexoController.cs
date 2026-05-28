@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using sap.DTO;
 using sap.Servicos.SAP;
 
 namespace sap.Controllers;
@@ -37,12 +36,5 @@ public class AnexoController(AnexoService anexoService) : Controller
                 detalhe = ex.Message
             });
         }
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> EditarDiretorioPadrao(AnexoConsultaDTO anexo)
-    {
-        var dadosAnexo = await _anexoService.EditarDiretorioPadrao(anexo);
-        return Ok(dadosAnexo);
     }
 }

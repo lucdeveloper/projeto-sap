@@ -65,11 +65,6 @@ public class AnexoService(SAPBase sapBase)
         await _sapBase.AtualizarRegistro($"{SAPRotas.Anexo}({codigoAnexo})", anexoSap, true);
     }
 
-    public async Task<AnexoConsultaDTO> EditarDiretorioPadrao(AnexoConsultaDTO anexo)
-    {
-        return  new AnexoConsultaDTO();
-    }
-
     public async Task<List<AnexoPedidoRetornoDTO>> ObterAnexos(int codigoAnexo)
     {
         var query = @"SELECT 

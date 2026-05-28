@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using sap.Configuracoes;
+﻿using sap.Configuracoes;
 using sap.DTO;
 using sap.Models;
 using sap.Servicos.Base;
