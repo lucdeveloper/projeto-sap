@@ -2,6 +2,6 @@
 {
     public class AnexoCriacao
     {
-        public List<Anexo> Attachments2_Lines { get; set; } = [];
+        public List<AnexoLinhaCriacao> Attachments2_Lines { get; set; } = [];
     }
 }

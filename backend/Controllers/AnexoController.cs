@@ -40,9 +40,9 @@ public class AnexoController(AnexoService anexoService) : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Editar(AnexoConsultaDTO anexo)
+    public async Task<IActionResult> EditarDiretorioPadrao(AnexoConsultaDTO anexo)
     {
-        var dadosAnexo = await _anexoService.Editar(anexo);
+        var dadosAnexo = await _anexoService.EditarDiretorioPadrao(anexo);
         return Ok(dadosAnexo);
     }
 }

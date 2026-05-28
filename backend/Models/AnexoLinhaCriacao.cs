@@ -1,7 +1,7 @@
 ﻿
 namespace sap.Models;
 
-public class Anexo
+public class AnexoLinhaCriacao
 {
     public  required string FileExtension { get; set; }
     public required string FileName { get; set; }
