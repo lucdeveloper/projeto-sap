@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using sap.Configuracoes;
+using sap.Servicos.ApiService;
 using sap.Servicos.Base;
 using sap.Servicos.SAP;
 using System.Net;
@@ -25,6 +26,8 @@ builder.Services.AddScoped<ImpostoService>();
 builder.Services.AddScoped<FilialService>();
 builder.Services.AddScoped<GrupoItemService>();
 builder.Services.AddScoped<AnexoService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IApiUrlServico, ApiUrlServico>();
 
 builder.Services.AddHttpClient<SAPBase>((sap, client) =>
 {

@@ -34,10 +34,16 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
                     NumeroReferenciaCliente = r.IsDBNull(4) ? string.Empty : r.GetString(4),
                     DataLancamento = r.GetDateTime(5).ToString("dd/MM/yyyy"),
                     DataEntrega = r.GetDateTime(6).ToString("dd/MM/yyyy"),
-                    Status = r.GetString(7) == "O" ? "Aberto" : "Fechado"
+                    Status = r.GetString(8) == "O" ? "Aberto" : "Fechado",
+                    CodigoAnexo = r.IsDBNull(9) ? null : r.GetInt32(9),
+
                 });
 
-        lista.ForEach(async (pedido) => pedido.TotalDocumento = await RetornarValorTotalItens(pedido.NumeroDocumento));
+        lista.ForEach(async (pedido) => {
+            pedido.TotalDocumento = await RetornarValorTotalItens(pedido.NumeroDocumento);
+            pedido.AnexoExibicao = pedido.CodigoAnexo is null ? [] : await _anexoService.RetornarExibicaoAnexos((int)pedido.CodigoAnexo);
+        });
+
         return lista;
     }
 
@@ -301,7 +307,8 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
 	                          ""DocDate"" AS ""DataLancamento"",
 	                          ""DocDueDate"" AS ""DataEntrega"",
 	                          ""DocTotal"" AS ""TotalDocumento"",
-	                          ""DocStatus"" AS ""Status""
+	                          ""DocStatus"" AS ""Status"",
+                              ""AtcEntry"" AS ""CodigoAnexo""
                           FROM
 	                          ORDR
                           WHERE 1 = 1");

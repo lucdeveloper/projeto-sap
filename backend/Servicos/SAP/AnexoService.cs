@@ -1,14 +1,17 @@
 ﻿using sap.Configuracoes;
 using sap.DTO;
+using sap.Helper;
 using sap.Models;
+using sap.Servicos.ApiService;
 using sap.Servicos.Base;
 using System.Data.Odbc;
 
 namespace sap.Servicos.SAP;
 
-public class AnexoService(SAPBase sapBase)
+public class AnexoService(SAPBase sapBase, IApiUrlServico apiUrlServico)
 {
     private readonly SAPBase _sapBase = sapBase;
+    private readonly IApiUrlServico _apiUrlServico = apiUrlServico;
 
     public async Task<AnexoConsultaDTO> BuscarAnexos()
     {
@@ -95,6 +98,23 @@ public class AnexoService(SAPBase sapBase)
         return anexos;
     }
 
+    public async Task<List<AnexoExibicaoDTO>> RetornarExibicaoAnexos(int codigoAnexo)
+    {
+        var baseUrl = _apiUrlServico.BaseUrl;
+        var dadosAnexo = await ObterAnexos(codigoAnexo);
+        var exibicao = dadosAnexo.Select((anexo) => new AnexoExibicaoDTO
+        {
+            Codigo = anexo.Codigo,
+            Linha = anexo.Linha,
+            NomeArquivo = anexo.NomeArquivo,
+            TipoArquivo = ContentTypeHelper.Retornar(anexo.ExtensaoArquivo),
+            Url = $"{_apiUrlServico.BaseUrl}/Anexo/buscar?codigo={anexo.Codigo}&numeroLinha={anexo.Linha}"
+        })
+        .ToList();
+            
+        return exibicao;
+    }
+   
     private string MontarQuery()
     {
         var query = @"SELECT ""AttachPath"" AS ""CaminhoAnexo"" FROM OADP o ";
