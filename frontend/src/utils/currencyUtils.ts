@@ -5,8 +5,5 @@ export const formatarMoedaBR = (valor: number | string | undefined | null): stri
 
   if (isNaN(numero)) return "R$ 0,00";
 
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  }).format(numero);
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(numero);
 };

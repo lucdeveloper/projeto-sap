@@ -1,6 +1,5 @@
 import {
   Bar,
-  Button,
   Title,
   Form,
   FormGroup,
@@ -8,14 +7,11 @@ import {
   Text,
   Label,
   BusyIndicator,
-  Input
 } from "@ui5/webcomponents-react";
-import { useState } from "react";
 import { useAnexoContext } from "../../contexts/anexoContext";
 
 export function Anexo() {
-   const { anexo, loading } = useAnexoContext();
-   const [editMode, setEditMode] = useState(false);
+  const { anexo, loading } = useAnexoContext();
 
   return (
     <BusyIndicator 
@@ -43,22 +39,7 @@ export function Anexo() {
               Configurações de anexo
             </Title>
           }
-          endContent={
-            !editMode && (
-              <Button
-                design="Emphasized"
-                style={{
-                  height: "1.625rem",
-                  minWidth: "2rem"
-                }}
-                onClick={() => setEditMode(true)}
-              >
-                Processar
-              </Button>
-            )
-          }
         />
-
         <div
           style={{
             flex: 1,
@@ -70,34 +51,11 @@ export function Anexo() {
           <Form layout="S1 M2 L2 XL2" labelSpan="S12 M12 L12 XL12">
             <FormGroup headerText="Anexos">
               <FormItem labelContent={<Label>Pasta padrão:</Label>}>
-                {editMode ? (
-                  <Input value={anexo?.caminhoPastaAnexo} style={{ width: '100%' }} />
-                ) : (
                   <Text>{anexo?.caminhoPastaAnexo}</Text>
-                )}
               </FormItem>
             </FormGroup>
           </Form>
         </div>
-
-        {editMode && (
-            <div style={{ padding: "0 0.5rem 0.5rem 0.5rem", width: '100%', boxSizing: 'border-box' }}>
-              <Bar 
-                design="FloatingFooter" 
-                style={{
-                  width: '100%',
-                }}
-                endContent={
-                  <>
-                    <Button design="Emphasized">Atualização</Button>
-                    <Button design="Transparent" onClick={() => setEditMode(false)}>Cancelar</Button>
-                  </>
-                }
-              />
-            </div>
-          )
-        }
-        
       </div>
     </BusyIndicator>
   );

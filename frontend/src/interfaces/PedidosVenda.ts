@@ -8,6 +8,7 @@ export interface PedidosVendaDTO {
     dataEntrega: Date;
     totalDocumento: number;
     status: string;
+    AnexoExibicao: AnexoExibicao[];
 };
 
 export interface FiltrosPedidosVenda{
@@ -32,6 +33,12 @@ export interface AnexoPedido {
   tamanhoArquivo: number;
 }
 
+export interface AnexoExibicao{
+  codigo: number,
+  linha: number,
+  nomeArquivo: string,
+  url: string,
+}
 
 export interface PedidoVenda {
   cliente: string;

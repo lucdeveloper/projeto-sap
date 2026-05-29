@@ -52,6 +52,7 @@ export function Navegacao( ) {
                         logo={<img alt="SAP Logo" src="https://ui5.github.io/webcomponents/images/sap-logo-svg.svg" /> }    
                         notificationsCount="10"
                         primaryTitle="Business One"
+                        onClick={() => navigate("/")}
                         profile={
                             <Avatar>
                                 <img

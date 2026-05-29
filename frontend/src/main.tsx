@@ -3,18 +3,10 @@ import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "@ui5/webcomponents-react";
 import App from "./App.tsx";
 import "./index.css";
-
-// UI5
 import "@ui5/webcomponents/dist/Assets.js";
 import "@ui5/webcomponents-react/dist/Assets.js";
-
-// Fiori
 import "@ui5/webcomponents-fiori/dist/Assets.js";
-
-// Localization
 import "@ui5/webcomponents-localization/dist/Assets.js";
-
-// Calendar
 import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js";
 
 // Icons

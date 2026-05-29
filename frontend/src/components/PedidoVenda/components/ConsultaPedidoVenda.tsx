@@ -15,7 +15,7 @@ import {
   MultiComboBoxItem,
   Button,
   TextAlign,
-  Link
+  Link,
 } from "@ui5/webcomponents-react";
 
 import { Icon } from "@ui5/webcomponents-react/Icon";
@@ -29,6 +29,7 @@ import { useParceiroNegocioSearch } from "../../../hooks/useParceiroNegocioSearc
 import { usePedidosVenda } from "../../../hooks/usePedidosVenda.ts";
 import { FiltrosPedidosVenda } from "../../../interfaces/PedidosVenda.ts";
 import { STATUS_PEDIDO_OPTIONS } from "../../../constants/pedidoVenda.ts";
+import { ColunaAnexos } from "./ColunasAnexos.tsx";
 
 export function ConsultaPedidoVenda() {
   const navigate = useNavigate();
@@ -78,7 +79,21 @@ export function ConsultaPedidoVenda() {
       { Header: "Status", accessor: "status" },
       {
         Header: "",
-        accessor: "acoes",
+        accessor: "anexoExibicao",
+        width: 70,
+        disableSortBy: true,
+        Cell: (instance: any) => (
+          <FlexBox
+            justifyContent="Center"
+            style={{ width: "100%" }}
+          >
+            <ColunaAnexos {...instance} />
+          </FlexBox>
+        )
+      },
+      {
+        Header: "",
+        accessor: "pedido",
         width: 50,
         maxWidth: 50,
         disableSortBy: true,
@@ -96,7 +111,7 @@ export function ConsultaPedidoVenda() {
             />
           );
         }
-      }          
+      }         
   ], []);
     
   const tabelaClientes = [
@@ -176,6 +191,7 @@ export function ConsultaPedidoVenda() {
     return () => window.removeEventListener("resize", atualizarLinhasPorAltura);
   }, []);
 
+ 
   return (
     <>
       <DialogSelecao  
