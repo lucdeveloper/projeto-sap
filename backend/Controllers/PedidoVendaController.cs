@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using sap.DTO;
+using sap.Helper;
+using sap.Servicos.ApiResponse;
 using sap.Servicos.SAP;
 
 namespace sap.Controllers;
@@ -33,16 +35,40 @@ public class PedidoVendaController(PedidoVendaService pedidoVendaService) : Cont
     }
 
     [HttpPost("criar")]
-    public async Task<IActionResult> Criar(PedidoVendaDTO pedidoVendaDto)
+    public async Task<ApiResponse<PedidoVendaRetornoDTO>> Criar(PedidoVendaDTO pedidoVendaDto)
     {
-        var pedido = await _pedidoVendaService.Criar(pedidoVendaDto);
-        return Ok(pedido);
+        try
+        {
+            var pedido = await _pedidoVendaService.Criar(pedidoVendaDto);
+            return ApiResponseHelper.Ok(pedido, "Operação concluída com sucesso");
+        }
+        catch (Exception ex)
+        {
+            var sapError = SapErrorParser.Parse(ex.Message);
+
+            return ApiResponseHelper.Fail<PedidoVendaRetornoDTO>(
+                sapError.Code,
+                sapError.Message
+            );
+        }
     }
 
     [HttpPatch("editar/{codigo}")]
-    public async Task<IActionResult> Editar(int codigo, [FromBody] PedidoVendaEdicaoDTO pedidoVendaEdicaoDTO)
+    public async Task<ApiResponse<PedidoVendaRetornoDTO>> Editar(int codigo, [FromBody] PedidoVendaEdicaoDTO pedidoVendaEdicaoDTO)
     {
-        var pedido = await _pedidoVendaService.Editar(codigo, pedidoVendaEdicaoDTO);
-        return Ok(pedido);
+        try
+        {
+            var pedido = await _pedidoVendaService.Editar(codigo, pedidoVendaEdicaoDTO);
+            return ApiResponseHelper.Ok(pedido, "Operação concluída com sucesso");
+        }
+        catch (Exception ex)
+        {
+            var sapError = SapErrorParser.Parse(ex.Message);
+
+            return ApiResponseHelper.Fail<PedidoVendaRetornoDTO>(
+                sapError.Code,
+                sapError.Message
+            );
+        }  
     }
 }
