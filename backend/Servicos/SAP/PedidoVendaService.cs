@@ -369,8 +369,6 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
 	                                        T0.""CntctCode"" = T3.""CntctCode""
                                         WHERE
 	                                        T0.""DocEntry"" = ?
-                                            AND T0.""CANCELED"" = 'N'   
-                                            AND T2.""LineStatus"" = 'O' 
                                         ORDER BY
 	                                        T2.""LineNum"" ASC");
 
@@ -393,8 +391,15 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
 
         var filtros = string.Join(",", valores.Select(_ => "?"));
 
-        query.Append($@" AND ""{nomeColuna}"" IN ({filtros})");
-
-        valores.ForEach(valor => parametros.Add(new OdbcParameter { Value = valor }));
+        if (nomeColuna == "CardCode")
+        {
+            query.Append($@" AND LOWER(""{nomeColuna}"") IN ({filtros})");
+            valores.ForEach(valor => parametros.Add(new OdbcParameter { Value = valor?.ToString()?.ToLower() }));
+        }
+        else
+        {
+            query.Append($@" AND ""{nomeColuna}"" IN ({filtros})");
+            valores.ForEach(valor => parametros.Add(new OdbcParameter { Value = valor }));
+        }
     }
 }
