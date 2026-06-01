@@ -156,9 +156,7 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
     } = useParceiroNegocioSearch();
 
     /* Componentes de pedido de venda */
-    const {proximoCodigo, loadings, carregarProximoCodigo, criarPedidoVenda, setProximoCodigo, atualizarPedidoVenda} = usePedidosVenda()
-    const [carregando, setCarregando] = useState(false);
-    const [editando, setEditando] = useState(false);
+    const {proximoCodigo, loadings, carregarProximoCodigo, criarPedidoVenda, setProximoCodigo, atualizarPedidoVenda,loading: lodingPedidoVenda} = usePedidosVenda()
     const [openToast, setOpenToast] = useState(false);
 
     /*Popover cliente */
@@ -472,28 +470,12 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
     }, [dadosEdicao]);
 
     const handleAdicionar = async () => {
-        setCarregando(true);
-        try {
-            const resultado = await criarPedidoVenda({
-                ...dadosForm,
-                anexos: arquivosUpload
-            });
-            setOpenToast(true);
-            
-            setTimeout(() => {
-                setCarregando(false);
-                onSucesso(resultado);
-            }, 1500);
-           
-        } catch (error) {
-            setCarregando(false);
-            console.error("Erro ao criar pedido de venda:", error);
-        }
-    }
+        const resultado = await criarPedidoVenda({ ...dadosForm, anexos: arquivosUpload });
+        if (!resultado) return;
+        onSucesso(resultado);
+    };
 
     const handleAtualizar = async () => {
-        setEditando(true);
-
         const corpoRequisicao: PedidoVendaEdicao = {
             dataEntrega: dadosForm.dataEntrega,
             pessoaContato: dadosForm?.pessoaContato,
@@ -516,29 +498,15 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
             }))
         }
 
-        try {
-            const resultado = await atualizarPedidoVenda(Number(dadosEdicao?.documentoEntrada), corpoRequisicao);
-
-            if (resultado){
-                setOpenToast(true);
-                setTimeout(() => {
-                    setEditando(false);
-                    onSucesso(resultado);
-                }, 1500);
-            }
-            
-        } catch (error) {
-            setEditando(false);
-            console.error("Erro ao editar pedido de venda:", error);
-        } 
+        const resultado = await atualizarPedidoVenda(Number(dadosEdicao?.documentoEntrada), corpoRequisicao);
+        if (!resultado) return;
+        onSucesso(resultado);
     }
-
-    const exibindoLoading = carregando || editando;
 
   if (proximoCodigo === null || loadings.proximoCodigo) return <BusyIndicator/>
   return (
     <BusyIndicator 
-        active={exibindoLoading} 
+        active={lodingPedidoVenda} 
         size="M" 
         style={{ 
             display: 'flex',

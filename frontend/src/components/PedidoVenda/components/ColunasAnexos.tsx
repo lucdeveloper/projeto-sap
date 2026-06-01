@@ -164,7 +164,6 @@ export function ColunaAnexos(instance: any) {
             </>
             )}
 
-            {/* EXCEL */}
             {isExcel && (
             <>
                 <div style={{ fontSize: "5rem" }}>

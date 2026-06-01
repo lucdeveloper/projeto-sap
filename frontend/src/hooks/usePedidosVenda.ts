@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { pedidoVendaService } from "../services/pedidoVendaService.ts";
 import { FiltrosPedidosVenda, PedidosVendaDTO, PedidoVenda, PedidoVendaEdicao, PedidoVendaRetornoDTO } from "../interfaces/PedidosVenda.ts";
+import { useApi } from "./useApi.ts";
+
 
 export function usePedidosVenda() {
     const [proximoCodigo, setProximoCodigo] = useState<number | null>(null);
@@ -11,7 +13,8 @@ export function usePedidosVenda() {
     const [filtrosSalvos, setFiltrosSalvos] = useState<FiltrosPedidosVenda>({ clientes: [], status: [], documentos: [] });
     const [inputCliente, setInputCliente] = useState("");
     const [inputDocumento, setInputDocumento] = useState("");
-
+    const { execute, loading } = useApi();
+    
     const carregarProximoCodigo = async () => {
         setLoadings(prev => ({ ...prev, proximoCodigo: true }));
         try {
@@ -68,31 +71,17 @@ export function usePedidosVenda() {
     };
 
     const criarPedidoVenda = async (pedidoVenda: PedidoVenda) => {
-        setLoadings(prev => ({ ...prev, criar: true }));
-
-        try {
-            const data = await pedidoVendaService.criar(pedidoVenda);
-            setPedido(data);
-            return data;
-        } catch (error) {
-            console.error("Erro ao criar pedido de venda:", error);
-        } finally {
-            setLoadings(prev => ({ ...prev, criar: false }));
-        } 
-    }
+        const data = await execute(() => pedidoVendaService.criar(pedidoVenda));
+        if (!data) return null; 
+        setPedido(data);
+        return data;
+    };
 
     const atualizarPedidoVenda = async (numeroDocumento: number ,pedidoVenda: PedidoVendaEdicao) => {
-        setLoadings(prev => ({ ...prev, editar: true }));
-
-        try {
-            const data = await pedidoVendaService.editar(numeroDocumento, pedidoVenda);
-            setPedidoEdicao(data);
-            return data;
-        } catch (error) {
-            console.error("Erro ao atualizar pedido de venda:", error);
-        } finally {
-            setLoadings(prev => ({ ...prev, editar: false }));
-        } 
+        const data = await execute(() => pedidoVendaService.editar(numeroDocumento, pedidoVenda));
+        if (!data) return null; 
+        setPedidoEdicao(data);
+        return data;
     }
 
     const resetBuscaPedidos = () => {
@@ -120,6 +109,7 @@ export function usePedidosVenda() {
         setProximoCodigo,
         pedidoEdicao,
         atualizarPedidoVenda,
-        carregarPorDocumentoEntrada
+        carregarPorDocumentoEntrada,
+        loading
     };
 }

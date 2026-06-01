@@ -1,7 +1,4 @@
-/* import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; */
 import { PedidoVendaView } from "./components/PedidoVendaView";
-/* import { PedidoVendaRetornoDTO } from "../../interfaces/PedidosVenda"; */
 import { PedidoVendaForm } from "./components/PedidoVendaForm";
 import { usePedidoVendaState } from "./hooks/usePedidoVendaState";
 import { StatusTelaPedido } from "./types";

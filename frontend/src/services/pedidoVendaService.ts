@@ -7,6 +7,7 @@ import
     PedidoVendaEdicao, 
     PedidoVendaRetornoDTO
 } from '../interfaces/PedidosVenda.ts';
+import { ApiResponse } from '../interfaces/ApiResponse.ts';
 
 const urlBase = '/PedidoVenda/';
 
@@ -23,11 +24,11 @@ export const pedidoVendaService = {
         const response = await api.post(urlBase, filtros);
         return response.data;
     },
-    criar: async (pedidoVendaDTO: PedidoVenda): Promise<PedidosVendaDTO> => {
+    criar: async (pedidoVendaDTO: PedidoVenda): Promise<ApiResponse<PedidosVendaDTO>> => {
         const response = await api.post(urlBase + 'criar', pedidoVendaDTO);
         return response.data;
     },
-    editar: async (numeroDocumento: number, pedidoVendaEdicao: PedidoVendaEdicao): Promise<PedidoVendaRetornoDTO> => {
+    editar: async (numeroDocumento: number, pedidoVendaEdicao: PedidoVendaEdicao): Promise<ApiResponse<PedidoVendaRetornoDTO>> => {
         const response = await api.patch(urlBase + `editar/${numeroDocumento}`, pedidoVendaEdicao);
         return response.data;
     }
