@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="backend/sap.csproj" />
+  <Project Path="../../ITEMSAPI 1/ITEMSAPI/CREATETABLE/B1Plus.CreateTables.csproj" Id="8fa7606d-b1d8-4ab8-91ed-08d3626f7afa">
+    <Platform Solution="Debug|*" Project="x64" />
+  </Project>
+  <Project Path="backend/B1Plus.Api.csproj" />
 </Solution>
