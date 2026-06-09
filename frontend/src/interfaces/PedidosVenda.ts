@@ -9,6 +9,7 @@ export interface PedidosVendaDTO {
     totalDocumento: number;
     status: string;
     AnexoExibicao: AnexoExibicao[];
+    possuiVendedores: boolean;
 };
 
 export interface FiltrosPedidosVenda{
@@ -48,6 +49,7 @@ export interface PedidoVenda {
   numeroReferenciaCliente: string;
   itens: ItemPedido[];
   anexos: AnexoPedido[];
+  vendedores: number[];
 }
 
 export interface ItemPedidoRetornoDTO {
@@ -59,13 +61,12 @@ export interface ItemPedidoRetornoDTO {
   preco: number;
 }
 
-export interface ItemPedidoRetornoDTO {
+export interface VendedorPedidoRetornoDTO {
   linha: number;
-  codigo: string;
-  descricao: string;
-  quantidade: number;
-  imposto: string;
-  preco: number;
+  documentoEntrada: number;
+  codigo: number;
+  nome: string;
+  observacao: string;
 }
 
 export interface AnexoPedidoRetornoDTO {
@@ -90,12 +91,14 @@ export interface PedidoVendaRetornoDTO {
   dataEntrega: string;
   dataDocumento: string;
   codigoPessoaContato: number;
+  codigoVendedores: number;
   pessoaContato: string;
   emailContato: string;
   empresa: number;
   codigoAnexo?: number;
   itens: ItemPedidoRetornoDTO[];
   anexos: AnexoPedidoRetornoDTO[];
+  vendedores: VendedorPedidoRetornoDTO[];
 }
 
 export interface ItemPedidoEdicao {
@@ -115,11 +118,18 @@ export interface AnexoPedidoEdicao {
   tamanhoArquivo: number;
 }
 
+export interface VendedorPedidoEdicao{ 
+  codigo : number;
+  linha?: number;  
+}
+
 export interface PedidoVendaEdicao {
   pessoaContato: number | null;
   numeroReferenciaCliente: string;
   dataEntrega: string;
   codigoAnexo?: number;
+  codigoVendedores?: number;
   itens: ItemPedidoEdicao[];
   anexos: AnexoPedidoEdicao[];
+  vendedores: VendedorPedidoEdicao[];
 }

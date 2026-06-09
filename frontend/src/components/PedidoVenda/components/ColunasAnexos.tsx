@@ -48,6 +48,7 @@ export function ColunaAnexos(instance: any) {
 
         <Button
           design="Transparent"
+          tooltip="Anexos"
           disabled={anexos.length === 0}
           icon="attachment"
           onClick={(e: any) => {

@@ -166,7 +166,8 @@ return (
                     startContent={<Label style={{ color: "#0a6ed1", fontWeight: "bold" }}>Produto</Label>}
                 /> 
             
-                <Table id="table"
+                <Table 
+                    id="table-conteudo"
                     overflowMode="Scroll"
                     headerRow=
                     {<TableHeaderRow sticky>
@@ -214,6 +215,47 @@ return (
 
         </ObjectPageSection>
 
+        <ObjectPageSection id="vendedores" titleText="Vendedores"> 
+            <FlexBox direction="Column">
+                <Bar
+                    design="Header"
+                    startContent={<Label style={{ color: "#0a6ed1", fontWeight: "bold" }}>Vendedores</Label>}
+                /> 
+            
+                <Table 
+                    id="table-vendedores"
+                    overflowMode="Scroll"
+                    headerRow={
+                        <TableHeaderRow sticky>
+                            <TableHeaderCell minWidth="50px" width="50px"><span>#</span></TableHeaderCell>
+                            <TableHeaderCell minWidth="200px"><span>Código do vendedor</span></TableHeaderCell>
+                            <TableHeaderCell minWidth="200px"><span>Nome do vendedor</span></TableHeaderCell>
+                            <TableHeaderCell minWidth="100px"><span>Observação</span></TableHeaderCell>
+                        </TableHeaderRow>
+                    }
+                >
+                        {dados?.vendedores?.map((linha, index) => (
+                                <TableRow  key={`${linha.codigo}-${index}`} rowKey={linha.codigo.toString()}>
+
+                                    <TableCell>
+                                        {index + 1}
+                                    </TableCell>
+
+                                    <TableCell>
+                                       <Text>{linha.codigo}</Text>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Text>{linha.nome || ""}</Text>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Text>{linha.observacao || ""}</Text>
+                                    </TableCell>
+                                </TableRow>
+                        ))}
+                </Table>
+            </FlexBox>
+        </ObjectPageSection>
+
         <ObjectPageSection id="anexo" titleText="Anexo"> 
         
             <FlexBox direction="Column">
@@ -222,7 +264,7 @@ return (
                     startContent={<Label style={{ color: "#0a6ed1", fontWeight: "bold" }}>Anexo</Label>}
                 /> 
             
-                <Table id="table"
+                <Table id="table-anexo"
                     overflowMode="Scroll"
                     headerRow=
                     {<TableHeaderRow sticky>

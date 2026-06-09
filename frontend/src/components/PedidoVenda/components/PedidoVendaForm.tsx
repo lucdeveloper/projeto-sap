@@ -12,7 +12,7 @@ import { PopoverView } from '../../PopoverView.tsx';
 import { useParceiroNegocioSearch } from '../../../hooks/useParceiroNegocioSearch.ts';
 import { usePedidosVenda } from '../../../hooks/usePedidosVenda.ts';
 import { useClientePopover } from '../../../hooks/Popover/useClientePopover.ts';
-import { AnexoPedido, AnexoPedidoEdicao, AnexoPedidoRetornoDTO, ItemPedido, ItemPedidoEdicao, ItemPedidoRetornoDTO, PedidoVenda, PedidoVendaEdicao, PedidoVendaRetornoDTO } from '../../../interfaces/PedidosVenda.ts';
+import { AnexoPedido, AnexoPedidoEdicao, AnexoPedidoRetornoDTO, ItemPedido, ItemPedidoEdicao, ItemPedidoRetornoDTO, PedidoVenda, PedidoVendaEdicao, PedidoVendaRetornoDTO, VendedorPedidoEdicao, VendedorPedidoRetornoDTO } from '../../../interfaces/PedidosVenda.ts';
 import { PessoaContatoFiltro } from '../../../interfaces/PessoaContato.ts';
 import { 
     Link, 
@@ -47,16 +47,26 @@ import {
     Toast, 
     AnalyticalTable,
     FileUploader,
-    Text,
+    Text
 } from '@ui5/webcomponents-react';
 import { formatarDataISO } from '../../../utils/dateUtils.ts';
 import { useAnexoContext } from '../../../contexts/anexoContext.tsx';
 import { AnexoIconeHelper } from '../../../utils/anexoHelper.ts';
+import { usePedidoVendaVendedor } from '../../../hooks/usePedidoVendaVendedor.ts';
+import { FiltrosPedidoVendaVendedor, PedidoVendaVendedorDTO } from '../../../interfaces/PedidoVendaVendedor.ts';
 
 type LinhaItemPedido = ItemPedido & {
   IdLinha?: number;
   id: number;
   descricao: string;
+};
+
+type LinhaVendedorPedido = {
+  IdLinha?: number;
+  id: number;
+  codigo: number | undefined;
+  nome: string;
+  observacao: string;
 };
 
 interface PedidoVendaFormProps {
@@ -84,6 +94,19 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
         resetBuscaItens 
     } = useItemSearch();
 
+    const {
+        pedidoVendaVendedor, 
+        loading: loadingVendedor, 
+        filtrosSalvos: filtrosSalvosVendedor , 
+        setFiltrosSalvos: setFiltrosSalvosVendedor, 
+        inputCodigo: inputCodigoVendedor, 
+        setInputCodigo: setInputCodigoVendedor, 
+        inputNome : inputNomeVendedor, 
+        setInputNome: setInputNomeVendedor, 
+        carregarPedidosVendaVendedor, 
+        resetBuscaPedidoVendaVendedor,
+    } = usePedidoVendaVendedor();
+
     const [openItem, setOpenItem] = useState(false);
     const [itensParaAdicionar, setItensParaAdicionar] = useState<ItemPedidoVendaDTO[]>([]);
     const [idsMarcadosParaExcluir, setIdsMarcadosParaExcluir] = useState<number[]>([]);
@@ -91,6 +114,12 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
     const [indexLinhaAtiva, setIndexLinhaAtiva] = useState<number | null>(null);
     const {uploadAnexo, arquivosUpload, setArquivosUpload, removerAnexos } = useAnexoContext();
     const [anexosSelecionadas, setAnexosSelecionadas] = useState<number[]>([]);
+    const [openVendedores, setOpenVendedores] = useState(false);
+    const [indexLinhaAtivaVendedores, setIndexLinhaAtivaVendedores] = useState<number | null>(null);
+    const [vendedoresParaAdicionar, setVendedoresParaAdicionar] = useState<PedidoVendaVendedorDTO[]>([]);
+    const [linhasVendedores, setLinhasVendedores] = useState<LinhaVendedorPedido[]>([]);
+    const [idsMarcadosParaExcluirVendedores, setIdsMarcadosParaExcluirVendedores] = useState<number[]>([]);
+    const [selectedRowIds, setSelectedRowIds] = useState<Record<string, boolean>>({});
   
     /* Componentes de impostos */
     const { 
@@ -163,6 +192,7 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
     const { abrirCliente, popoverProps } = useClientePopover();
     
     const selectionRef = useRef<any>(null);
+    const vendedoresReferencia = useRef<any>(null);
     const anexoReferencia = useRef<any>(null);
     
     const [dadosForm, setDadosForm] = useState<PedidoVenda>({
@@ -172,7 +202,8 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
         numeroReferenciaCliente: "",
         empresa: 0,
         itens: [],
-        anexos:[]
+        anexos:[],
+        vendedores:[]
     });
 
     const tabelaClientes =  [
@@ -199,6 +230,12 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
         { Header: "Grupo do item", accessor: "grupo" }
     ]
 
+    const tabelaVendedores = [
+        { Header: "Código do vendedor", accessor: "codigo" },
+        { Header: "Nome do vendedor", accessor: "nome" },
+        { Header: "Observação", accessor: "observacao" },
+    ]
+
     const tabelaImposto = [
         { Header: "Código", accessor: "codigo" },
         { Header: "Nome", accessor: "nome" },
@@ -221,6 +258,13 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
             preco: 0,
             descricao: ""
         }]);
+
+        setLinhasVendedores([{
+            id: 1,
+            codigo: undefined,
+            nome: "",
+            observacao: ""
+        }])
 
         atualizarFormulario({ 
             cliente: item.codigoCliente, 
@@ -259,13 +303,38 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
         if (!selection) return;
 
         const ids = Array.from(selection.getSelectedAsSet())
-                         .map((key) => Number(key as string))
+                         .map((key) =>{
+                            const stringKey = key as string;
+                            if (stringKey.includes('-')) {
+                                return Number(stringKey.split('-')[1]);
+                            }
+                            return Number(stringKey);
+                         })
                          .filter(id => {
                             const linha = linhas.find(l => l.id === id);
                             return linha && (linha.item || linha.imposto);
                          });
 
         setIdsMarcadosParaExcluir(ids);
+    };
+
+    const handleSelectionChangeVendedores = () => {
+        const selection = vendedoresReferencia.current;
+        if (!selection) return;
+
+        const ids = Array.from(selection.getSelectedAsSet())
+                        .map((key) => {
+                            const stringKey = key as string;
+                            if (stringKey.includes('-')) {
+                                return Number(stringKey.split('-')[1]);
+                            }
+                            return Number(stringKey);
+                        })
+                        .filter(id => {
+                            return !isNaN(id) && linhasVendedores.some(l => l.id === id);
+                        });
+
+        setIdsMarcadosParaExcluirVendedores(ids);
     };
 
     const selecionarAnexos = () => {
@@ -302,12 +371,48 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
         ];
     };
 
+    const normalizeLinhasVendedores = (linhasAtuais: LinhaVendedorPedido[]) => {
+        const preenchidas = linhasAtuais.filter(l => l.codigo !== undefined && l.codigo !== null);
+
+        const reindexadas = preenchidas.map((linha, index) => ({
+            ...linha,
+            id: index + 1
+        }));
+
+        return [
+            ...reindexadas,
+            {
+                id: reindexadas.length + 1,
+                documentoEntrada: undefined,
+                IdLinha: undefined,
+                codigo: undefined,
+                nome: "",
+                observacao: ""
+            }
+        ];
+    };
+
     const removerSelecionados = () => {
         setLinhas(prev => { const novasLinhas = prev.filter(linha => !idsMarcadosParaExcluir.includes(linha.id) );
             return normalizeLinhas(novasLinhas);
         });
 
         setIdsMarcadosParaExcluir([]);
+
+        if (selectionRef.current && typeof selectionRef.current.setAttribute === 'function') {
+            selectionRef.current.setAttribute('selected', '');
+        }
+    };
+
+     const removerVendedoresSelecionados = () => {
+        setLinhasVendedores(prev => { const novasLinhas = prev.filter(linha => !idsMarcadosParaExcluirVendedores.includes(linha.id) );
+            return normalizeLinhasVendedores(novasLinhas);
+        });
+
+        setIdsMarcadosParaExcluirVendedores([]);
+        if (vendedoresReferencia.current && typeof vendedoresReferencia.current.setAttribute === 'function') {
+            vendedoresReferencia.current.setAttribute('selected', '');
+        }
     };
 
     const totalPedido = useMemo(() => {
@@ -328,6 +433,16 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
         setDadosForm(prev => ({ ...prev, itens: itensValidos  }));
            
     }, [linhas]);
+
+    useEffect(() => {
+        const codigosVendedoresValidos = linhasVendedores.filter(l => l.codigo !== undefined && l.codigo !== null)
+                                                         .map(l => Number(l.codigo));
+        setDadosForm(prev => ({ 
+            ...prev, 
+            vendedores: codigosVendedoresValidos 
+        }));
+        
+    }, [linhasVendedores]);
 
     const atualizarLinha = (
         id: number,
@@ -360,7 +475,7 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
             dadosForm.dataEntrega ||
             dadosForm.empresa !== 0 ||
             dadosForm.itens.length > 0 ||
-            linhas.some(l => l.item || l.quantidade > 0 || l.preco > 0);
+            linhas.some(l => l.item || l.quantidade > 0 || l.preco > 0) || linhasVendedores.some(l => l.codigo);
 
         if (temAlteracao) {
             const confirmou = window.confirm("Esta página contém dados não gravados. Sair da página?");
@@ -397,6 +512,13 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
             carregarParceirosNegocio(filtrosIniciais);
         }
     }, [openCliente]);
+
+    useEffect(() => {
+        if (openVendedores) {
+            const filtrosIniciais: FiltrosPedidoVendaVendedor = { codigos: [], nomes: [] };
+            carregarPedidosVendaVendedor(filtrosIniciais);
+        }
+    }, [openVendedores])
 
     useEffect(() => {
         if (openParceiroContato && parceiroNegocioSelecionado?.codigoCliente) {
@@ -436,7 +558,8 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
             empresa: dadosEdicao.empresa,
             pessoaContato: dadosEdicao.codigoPessoaContato,
             itens: [],
-            anexos: []
+            anexos: [],
+            vendedores:[]
         });
 
         const linhasVindasDoBanco = dadosEdicao.itens.map((item: ItemPedidoRetornoDTO) => ({
@@ -450,6 +573,17 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
         }));
 
         setLinhas(normalizeLinhas(linhasVindasDoBanco));
+
+        const vendedoresBanco = dadosEdicao.vendedores.map((vendedor: VendedorPedidoRetornoDTO ) => ({
+            id: vendedor.linha,
+            IdLinha: vendedor.linha,
+            codigo: vendedor.codigo,
+            documentoEntrada: vendedor.documentoEntrada,
+            nome: vendedor.nome,
+            observacao: vendedor.observacao
+        }));
+
+        setLinhasVendedores(normalizeLinhasVendedores(vendedoresBanco));
 
         if (arquivosUpload.length === 0) {
 
@@ -470,7 +604,7 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
     }, [dadosEdicao]);
 
     const handleAdicionar = async () => {
-        const resultado = await criarPedidoVenda({ ...dadosForm, anexos: arquivosUpload });
+       const resultado = await criarPedidoVenda({ ...dadosForm, anexos: arquivosUpload });
         if (!resultado) return;
         onSucesso(resultado);
     };
@@ -481,6 +615,7 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
             pessoaContato: dadosForm?.pessoaContato,
             numeroReferenciaCliente: dadosForm.numeroReferenciaCliente,
             codigoAnexo: dadosEdicao?.codigoAnexo,
+            codigoVendedores: Number(dadosEdicao?.codigoVendedores),
             itens: linhas.filter(l => l.item !== "")
                          .map((item): ItemPedidoEdicao => ({
                             linha: item.IdLinha,
@@ -489,12 +624,16 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
                             preco: item.preco,
                             imposto: item.imposto
             })),
-            anexos: arquivosUpload.map((anexo):  AnexoPedidoEdicao => ({
+            anexos: arquivosUpload.map((anexo): AnexoPedidoEdicao => ({
                 linha: anexo.linha,
                 caminhoDestino: anexo.caminhoDestino,
                 extensaoArquivo: anexo.extensaoArquivo,
                 nomeArquivo: anexo.nomeArquivo,
                 tamanhoArquivo: anexo.tamanhoArquivo
+            })),
+            vendedores: linhasVendedores.filter(l => l.codigo != undefined).map((vendedor): VendedorPedidoEdicao => ({
+                linha: vendedor.IdLinha,
+                codigo: Number(vendedor.codigo),  
             }))
         }
 
@@ -502,6 +641,7 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
         if (!resultado) return;
         onSucesso(resultado);
     }
+    
 
   if (proximoCodigo === null || loadings.proximoCodigo) return <BusyIndicator/>
   return (
@@ -929,11 +1069,159 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
                     loading={loadingItens}
                     selectionMode="Multiple"
                     onRowSelect={(e) => {
+                        if (!e.detail || !e.detail.selectedRowIds) return;
+                        
                         const selectedIds = e.detail.selectedRowIds;
                         const rowsSelecionadas = Object.keys(selectedIds)
-                                                    .filter((key) => selectedIds[key])
-                                                    .map((key) => itens[Number(key)]);
+                                                       .filter((key) => selectedIds[key] === true)
+                                                       .map((key) => itens[Number(key)])
+                                                       .filter(Boolean); 
+                            
                         setItensParaAdicionar(rowsSelecionadas);
+                    }}
+                />
+            </DialogSelecao>
+
+            {/* Dialog Seleção Vendedores */}
+            <DialogSelecao 
+                open={openVendedores}
+                onClose={() => {
+                    setOpenVendedores(false);
+                    setIndexLinhaAtivaVendedores(null);
+                    resetBuscaPedidoVendaVendedor();
+                }}   
+                textoDialog="Lista de vendedores"
+                onGo={() => carregarPedidosVendaVendedor()}
+                filters={
+                    <>
+                    <FilterGroupItem label="Códigos" filterKey="codigos">
+                        <MultiInput
+                            showValueHelpIcon
+                            value={inputCodigoVendedor}
+                            tokens={filtrosSalvosVendedor.codigos.map((codigo) => (
+                                <Token key={codigo} text={codigo.toString()} />
+                            ))}
+                            onInput={(e: any) => setInputCodigoVendedor(e.target.value)}
+                            onKeyDown={(e: any) => {
+                                if (e.key === "Enter" && inputCodigoVendedor.trim()) {
+                                    setFiltrosSalvosVendedor(prev => ({
+                                        ...prev,
+                                        codigos: [...prev.codigos, Number(inputCodigoVendedor.trim())]
+                                    }));
+                                    setInputCodigoVendedor("");
+                                }
+                            }}
+                            onTokenDelete={(e: any) => {
+                                const textos = e.detail.tokens.map((t: any) => Number(t.text));
+                                setFiltrosSalvosVendedor(prev => ({
+                                    ...prev,
+                                    codigos: prev.codigos.filter(n => !textos.includes(n))
+                                }));
+                            }}
+                        />
+                    </FilterGroupItem>
+
+                    <FilterGroupItem label="Nomes" filterKey="nomes">
+                        <MultiInput
+                            showValueHelpIcon
+                            value={inputNomeVendedor}
+                            tokens={filtrosSalvosVendedor.nomes.map((nome) => (
+                                <Token key={nome} text={nome} />
+                            ))}
+                            onInput={(e: any) => setInputNomeVendedor(e.target.value)}
+                            onKeyDown={(e: any) => {
+                                if (e.key === "Enter" && inputNomeVendedor.trim()) {
+                                    setFiltrosSalvosVendedor(prev => ({
+                                        ...prev,
+                                        nomes: [...prev.nomes, inputNomeVendedor.trim()]
+                                    }));
+                                    setInputNomeVendedor("");
+                                }
+                            }}
+                            onTokenDelete={(e: any) => {
+                                const textos = e.detail.tokens.map((t: any) => t.text);
+                                setFiltrosSalvosVendedor(prev => ({
+                                    ...prev,
+                                    nomes: prev.nomes.filter(n => !textos.includes(n))
+                                }));
+                            }}
+                        />       
+                    </FilterGroupItem>
+                    </>   
+                }
+                onConfirm={() => {
+                    if (vendedoresParaAdicionar.length === 0) {
+                        setOpenVendedores(false);
+                        setIndexLinhaAtivaVendedores(null);
+                        return;
+                    }
+
+                    setLinhasVendedores(prev => {
+                        let novasLinhas = [...prev];
+                        let vendedoresRestantes = [...vendedoresParaAdicionar];
+
+                        if (indexLinhaAtivaVendedores !== null && indexLinhaAtivaVendedores >= 0) {
+                            const primeiroItem = vendedoresRestantes.shift();
+
+                            if (primeiroItem) {
+                                novasLinhas[indexLinhaAtivaVendedores] = {
+                                    ...novasLinhas[indexLinhaAtivaVendedores],
+                                    codigo: primeiroItem.codigo,
+                                    nome: primeiroItem.nome,
+                                    observacao: primeiroItem.observacao
+                                };
+                            }
+                        }
+
+                        if (vendedoresRestantes.length > 0) {
+                            const novosMapeados: LinhaVendedorPedido[] = vendedoresRestantes.map((vendedor) => ({
+                                id: 0,
+                                documentoEntrada: undefined,
+                                codigo: vendedor.codigo,
+                                nome: vendedor.nome,
+                                observacao: vendedor.observacao,
+                            }));
+
+                            const preenchidas = novasLinhas.filter(l => l.codigo);
+                            novasLinhas = [...preenchidas, ...novosMapeados];
+                        }
+
+                        return normalizeLinhasVendedores(novasLinhas);
+                    });
+
+                    setVendedoresParaAdicionar([]); 
+                    setIndexLinhaAtivaVendedores(null); 
+                    setOpenVendedores(false);
+                    resetBuscaPedidoVendaVendedor();
+                }}
+            >
+                <AnalyticalTable
+                    sortable
+                    visibleRows={10}
+                    columns={tabelaVendedores}
+                    data={pedidoVendaVendedor}
+                    loading={loadingVendedor}
+                    selectionMode="Multiple"
+                    selectedRowIds={selectedRowIds}
+                    onRowSelect={(e) => {
+                        if (!e.detail?.selectedRowIds) return;
+
+                        const novoSelectedIds = { ...e.detail.selectedRowIds };
+
+                        Object.keys(novoSelectedIds).forEach((key) => {
+                            const vendedor = pedidoVendaVendedor[Number(key)];
+                            const jaExiste = linhasVendedores.some((linha) => linha.codigo === vendedor.codigo);
+                               
+                            if (jaExiste) delete novoSelectedIds[key];
+                        });
+
+                        setSelectedRowIds(novoSelectedIds);
+
+                        const rowsSelecionadas = Object.keys(novoSelectedIds)
+                                                       .filter((key) => novoSelectedIds[key])
+                                                       .map((key) => pedidoVendaVendedor[Number(key)]);
+
+                        setVendedoresParaAdicionar(rowsSelecionadas);
                     }}
                 />
             </DialogSelecao>
@@ -1243,7 +1531,7 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
                                 }
                             >
                                     {linhas.map((linha, index) => (
-                                            <TableRow key={linha.id} rowKey={linha.id.toString()}>
+                                            <TableRow key={`item-${linha.id}`} rowKey={`item-${linha.id}`}>
                                                 <TableCell>{index + 1}</TableCell>
                                                 <TableCell>
                                                     <MultiInput
@@ -1289,6 +1577,66 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
                                                             }}
                                                         />
                                                     )}
+                                                </TableCell>
+                                            </TableRow>
+                                    ))}
+                            </Table>
+                        </FlexBox>
+                    </ObjectPageSection>
+
+                    <ObjectPageSection id="vendedores" titleText="Vendedores"> 
+                        <FlexBox direction="Column">
+                            <Bar
+                                design="Header"
+                                startContent={<Label style={{ color: "#0a6ed1", fontWeight: "bold" }}>Vendedores</Label>}
+                                endContent={
+                                    <Button
+                                        icon="delete"
+                                        disabled={idsMarcadosParaExcluirVendedores.length === 0}
+                                        design="Transparent"
+                                        onClick={removerVendedoresSelecionados}
+                                    />
+                                }
+                            /> 
+                        
+                            <Table 
+                                id="table-vendedores"
+                                overflowMode="Scroll"
+                                features={
+                                    <TableSelectionMulti
+                                        ref={vendedoresReferencia}
+                                        behavior="RowSelector" 
+                                        onChange={handleSelectionChangeVendedores}
+                                    />
+                                }
+                                headerRow={
+                                    <TableHeaderRow sticky>
+                                        <TableHeaderCell minWidth="50px" width="50px"><span>#</span></TableHeaderCell>
+                                        <TableHeaderCell minWidth="200px"><span>Código do vendedor</span></TableHeaderCell>
+                                        <TableHeaderCell minWidth="200px"><span>Nome do vendedor</span></TableHeaderCell>
+                                        <TableHeaderCell minWidth="100px"><span>Observação</span></TableHeaderCell>
+                                    </TableHeaderRow>
+                                }
+                            >
+                                    {linhasVendedores.map((linha, index) => (
+                                            <TableRow key={`vendedor-${linha.id}`} rowKey={`vendedor-${linha.id}`}>
+                                                <TableCell>{index + 1}</TableCell>
+                                                <TableCell>
+                                                    <MultiInput
+                                                        required
+                                                        value={linha.codigo?.toString() ?? ""}
+                                                        showValueHelpIcon
+                                                        onValueHelpTrigger={() => {
+                                                            setIndexLinhaAtivaVendedores(index);
+                                                            setOpenVendedores(true);
+                                                        }}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Input readonly value={linha.nome || ""} />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Input readonly value={linha.observacao || ""} />
                                                 </TableCell>
                                             </TableRow>
                                     ))}

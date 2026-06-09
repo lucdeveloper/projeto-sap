@@ -16,6 +16,8 @@ import {
   Button,
   TextAlign,
   Link,
+  Dialog,
+  Bar
 } from "@ui5/webcomponents-react";
 
 import { Icon } from "@ui5/webcomponents-react/Icon";
@@ -30,11 +32,19 @@ import { usePedidosVenda } from "../../../hooks/usePedidosVenda.ts";
 import { FiltrosPedidosVenda } from "../../../interfaces/PedidosVenda.ts";
 import { STATUS_PEDIDO_OPTIONS } from "../../../constants/pedidoVenda.ts";
 import { ColunaAnexos } from "./ColunasAnexos.tsx";
+import { CardExibicao } from "../../CardExibicao.tsx";
+import { usePedidoVendaVendedor } from "../../../hooks/usePedidoVendaVendedor.ts";
+import { formatarMoedaBR } from "../../../utils/currencyUtils.ts";
 
 export function ConsultaPedidoVenda() {
   const navigate = useNavigate();
   const { abrirCliente, popoverProps } = useClientePopover();
   const {pedidos, loadings, carregarPedidosVenda, filtrosSalvos, setFiltrosSalvos, inputCliente, setInputCliente,inputDocumento, setInputDocumento, carregarPorDocumentoEntrada } = usePedidosVenda();
+  const [abrirCard, setAbrirCard] = useState(false);
+  const {
+        carregarValoresComissionaveis,
+        valoresComissionaveis,
+    } = usePedidoVendaVendedor();
 
   const tabelaPedidosVenda = useMemo(() => [
       { Header: "Nº Documento",  accessor: "documento" },
@@ -77,6 +87,28 @@ export function ConsultaPedidoVenda() {
         }
       },
       { Header: "Status", accessor: "status" },
+      {
+        Header: "",
+        accessor: "vendedores",
+        width: 50,
+        maxWidth: 50,
+        disableSortBy: true,
+        Cell: (instance: any) => {
+          const pedido = instance.row.original;
+          return (
+            <Button
+              design="Transparent"
+              tooltip="Vendedores"
+              icon="company-view"
+              disabled={!pedido.possuiVendedores}
+              onClick={async () => {
+                  await carregarValoresComissionaveis(pedido.numeroDocumento);
+                  setAbrirCard(true) 
+              }}
+            />
+          );
+        }
+      },   
       {
         Header: "",
         accessor: "anexoExibicao",
@@ -194,272 +226,294 @@ export function ConsultaPedidoVenda() {
  
   return (
     <>
-      <DialogSelecao  
-            open={openCliente} 
-            onClose={() => {
-              setOpenCliente(false);
-              resetBuscaParceiroNegocio();
-            }}  
-            textoDialog="Selecionar clientes"
-            onGo={() => carregarParceirosNegocio()}
-            onConfirm={() => {
-              if (selectedClientes.length === 0) setOpenCliente(false);
+        <DialogSelecao  
+              open={openCliente} 
+              onClose={() => {
+                setOpenCliente(false);
+                resetBuscaParceiroNegocio();
+              }}  
+              textoDialog="Selecionar clientes"
+              onGo={() => carregarParceirosNegocio()}
+              onConfirm={() => {
+                if (selectedClientes.length === 0) setOpenCliente(false);
 
-              const novosCodigos = selectedClientes.map((c) => c.codigoCliente);
+                const novosCodigos = selectedClientes.map((c) => c.codigoCliente);
 
-              const listaAtualizada = Array.from(
-                new Set([...filtrosSalvos.clientes, ...novosCodigos])
-              );
+                const listaAtualizada = Array.from(
+                  new Set([...filtrosSalvos.clientes, ...novosCodigos])
+                );
 
-              atualizarFiltro("clientes", listaAtualizada);
-              setSelectedClientes([]);
-              setOpenCliente(false);
-              resetBuscaParceiroNegocio();
-            }}
-            filters={
-              <>
-                  <FilterGroupItem label="Código do PN" filterKey="codigo">
-                    <MultiInput
-                        showValueHelpIcon
-                        value={inputCodigoParceiroNegocio}
-                        tokens={filtrosSalvosParceiroNegocio.codigos.map((codigo) => (
-                          <Token key={codigo} text={codigo} />
-                        ))}
-                        onInput={(e: any) => setInputCodigoParceiroNegocio(e.target.value)}
-                        onKeyDown={(e: any) => {
-                            if (e.key === "Enter") {
-                            const value = inputCodigoParceiroNegocio.trim();
-                            if (!value) return;
-        
-                            setFiltrosSalvosParceiroNegocio(prev => ({
-                                ...prev,
-                                codigos: [...prev.codigos, value]
-                            }));
-
-                            setInputCodigoParceiroNegocio("");
-                            }
-                        }}
-                        onTokenDelete={(e: any) => {
-                            const tokensRemovidos = e.detail.tokens;
-
-                            setFiltrosSalvosParceiroNegocio(prev => ({
-                                ...prev,
-                                codigos: prev.codigos.filter((c) => !tokensRemovidos.some((t: any) => t.text === c))
-                            }));
-                        }}      
-                  />
-                  </FilterGroupItem>
-
-                  <FilterGroupItem label="Nome do PN" filterKey="nome">
+                atualizarFiltro("clientes", listaAtualizada);
+                setSelectedClientes([]);
+                setOpenCliente(false);
+                resetBuscaParceiroNegocio();
+              }}
+              filters={
+                <>
+                    <FilterGroupItem label="Código do PN" filterKey="codigo">
                       <MultiInput
                           showValueHelpIcon
-                          value={inputNomeParceiroNegocio}
-                          tokens={filtrosSalvosParceiroNegocio.nomes.map((nome) => (
-                            <Token key={nome} text={nome} />
+                          value={inputCodigoParceiroNegocio}
+                          tokens={filtrosSalvosParceiroNegocio.codigos.map((codigo) => (
+                            <Token key={codigo} text={codigo} />
                           ))}
-                          onInput={(e: any) => setInputNomeParceiroNegocio(e.target.value)}
+                          onInput={(e: any) => setInputCodigoParceiroNegocio(e.target.value)}
                           onKeyDown={(e: any) => {
                               if (e.key === "Enter") {
-                              const value = inputNomeParceiroNegocio.trim();
+                              const value = inputCodigoParceiroNegocio.trim();
                               if (!value) return;
           
                               setFiltrosSalvosParceiroNegocio(prev => ({
                                   ...prev,
-                                  nomes: [...prev.nomes, value]
+                                  codigos: [...prev.codigos, value]
                               }));
 
-                              setInputNomeParceiroNegocio("");
+                              setInputCodigoParceiroNegocio("");
                               }
-                          }} 
+                          }}
                           onTokenDelete={(e: any) => {
-                            const tokensRemovidos = e.detail.tokens;
+                              const tokensRemovidos = e.detail.tokens;
 
-                            setFiltrosSalvosParceiroNegocio(prev => ({
-                                ...prev,
-                                nomes: prev.nomes.filter((c) => !tokensRemovidos.some((t: any) => t.text === c)) 
-                            }));
-                          }}     
-                          />
-                  </FilterGroupItem>
-              </>   
-            }
-            >
-              <AnalyticalTable
-                  visibleRows={10}
-                  sortable
-                  columns={tabelaClientes}
-                  data={parceirosNegocio}
-                  loading={loadingParceiroNegocio.parceiroNegocio}
-                  selectionMode="Multiple"
-                  onRowSelect={(e) => {
-                    const linhasSelecionadas = Object.keys(e.detail.selectedRowIds)
-                                                     .filter((key) => e.detail.selectedRowIds[key])
-                                                     .map((key) => parceirosNegocio[Number(key)]);
+                              setFiltrosSalvosParceiroNegocio(prev => ({
+                                  ...prev,
+                                  codigos: prev.codigos.filter((c) => !tokensRemovidos.some((t: any) => t.text === c))
+                              }));
+                          }}      
+                    />
+                    </FilterGroupItem>
 
-                    setSelectedClientes(linhasSelecionadas);
-                  }}
-               />
-      </DialogSelecao>
-        
-      <DynamicPage
-        style={{
-          height: "100%",
-          background: "var(--sapBackgroundColor)"
-        }}
-        hidePinButton
-        headerArea={
-          <DynamicPageHeader>
-            <FilterBar
-              filterContainerWidth="13.125rem" 
-              header={<Title level="H2" size="H4">Filtros</Title>} 
-              hideToolbar 
-              showGoOnFB 
-              hideFilterConfiguration 
-              onGo={() => carregarPedidosVenda()}
-            > 
-              <FilterGroupItem filterKey="documentos" label="Nº do documento">
-                      <MultiInput
+                    <FilterGroupItem label="Nome do PN" filterKey="nome">
+                        <MultiInput
                             showValueHelpIcon
-                            value={inputDocumento}
-                            tokens={filtrosSalvos.documentos.map((codigo) => (
-                              <Token key={codigo} text={codigo.toString()} />
+                            value={inputNomeParceiroNegocio}
+                            tokens={filtrosSalvosParceiroNegocio.nomes.map((nome) => (
+                              <Token key={nome} text={nome} />
                             ))}
-                            onInput={(e: any) => setInputDocumento(e.target.value)}
+                            onInput={(e: any) => setInputNomeParceiroNegocio(e.target.value)}
                             onKeyDown={(e: any) => {
-                              if (e.key === "Enter") {
-                                const value = Number(inputDocumento.trim());
+                                if (e.key === "Enter") {
+                                const value = inputNomeParceiroNegocio.trim();
                                 if (!value) return;
-                                if (!filtrosSalvos.documentos.includes(value)) {
-                                  atualizarFiltro("documentos", [...filtrosSalvos.documentos, value]);
+            
+                                setFiltrosSalvosParceiroNegocio(prev => ({
+                                    ...prev,
+                                    nomes: [...prev.nomes, value]
+                                }));
+
+                                setInputNomeParceiroNegocio("");
                                 }
-                                setInputDocumento("");
-                              }
-                            }}
+                            }} 
                             onTokenDelete={(e: any) => {
                               const tokensRemovidos = e.detail.tokens;
-                              const novaLista = filtrosSalvos.documentos.filter((documento) => !tokensRemovidos.some((t: any) => Number(t.text) === documento));
-                              atualizarFiltro("documentos", novaLista);         
-                            }}
-                        />
-              </FilterGroupItem>
-              
-              <FilterGroupItem filterKey="clientes" label="Código do cliente">
-                <MultiInput
-                  showValueHelpIcon
-                  value={inputCliente}
-                  tokens={filtrosSalvos.clientes.map((codigo) => (
-                    <Token key={codigo} text={codigo} />
-                  ))}
-                  onInput={(e: any) => setInputCliente(e.target.value)}
-                  onKeyDown={(e: any) => {
-                    if (e.key === "Enter") {
-                      const value = inputCliente.trim();
-                      if (!value) return;
-                      if (!filtrosSalvos.clientes.includes(value)) {
-                        atualizarFiltro("clientes", [...filtrosSalvos.clientes, value]);
-                      }
-                      setInputCliente("");
-                    }
-                  }}
-                  onTokenDelete={(e: any) => {
-                    const tokensRemovidos = e.detail.tokens;
-                    const novaLista = filtrosSalvos.clientes.filter((cliente) => !tokensRemovidos.some((t: any) => t.text === cliente));
-                    atualizarFiltro("clientes", novaLista);         
-                  }}
-                  onValueHelpTrigger={() => setOpenCliente(true)}
+
+                              setFiltrosSalvosParceiroNegocio(prev => ({
+                                  ...prev,
+                                  nomes: prev.nomes.filter((c) => !tokensRemovidos.some((t: any) => t.text === c)) 
+                              }));
+                            }}     
+                            />
+                    </FilterGroupItem>
+                </>   
+              }
+              >
+                <AnalyticalTable
+                    visibleRows={10}
+                    sortable
+                    columns={tabelaClientes}
+                    data={parceirosNegocio}
+                    loading={loadingParceiroNegocio.parceiroNegocio}
+                    selectionMode="Multiple"
+                    onRowSelect={(e) => {
+                      const linhasSelecionadas = Object.keys(e.detail.selectedRowIds)
+                                                      .filter((key) => e.detail.selectedRowIds[key])
+                                                      .map((key) => parceirosNegocio[Number(key)]);
+
+                      setSelectedClientes(linhasSelecionadas);
+                    }}
                 />
-              </FilterGroupItem>
+        </DialogSelecao>
+          
+        <DynamicPage
+          style={{
+            height: "100%",
+            background: "var(--sapBackgroundColor)"
+          }}
+          hidePinButton
+          headerArea={
+            <DynamicPageHeader>
+              <FilterBar
+                filterContainerWidth="13.125rem" 
+                header={<Title level="H2" size="H4">Filtros</Title>} 
+                hideToolbar 
+                showGoOnFB 
+                hideFilterConfiguration 
+                onGo={() => carregarPedidosVenda()}
+              > 
+                <FilterGroupItem filterKey="documentos" label="Nº do documento">
+                        <MultiInput
+                              showValueHelpIcon
+                              value={inputDocumento}
+                              tokens={filtrosSalvos.documentos.map((codigo) => (
+                                <Token key={codigo} text={codigo.toString()} />
+                              ))}
+                              onInput={(e: any) => setInputDocumento(e.target.value)}
+                              onKeyDown={(e: any) => {
+                                if (e.key === "Enter") {
+                                  const value = Number(inputDocumento.trim());
+                                  if (!value) return;
+                                  if (!filtrosSalvos.documentos.includes(value)) {
+                                    atualizarFiltro("documentos", [...filtrosSalvos.documentos, value]);
+                                  }
+                                  setInputDocumento("");
+                                }
+                              }}
+                              onTokenDelete={(e: any) => {
+                                const tokensRemovidos = e.detail.tokens;
+                                const novaLista = filtrosSalvos.documentos.filter((documento) => !tokensRemovidos.some((t: any) => Number(t.text) === documento));
+                                atualizarFiltro("documentos", novaLista);         
+                              }}
+                          />
+                </FilterGroupItem>
+                
+                <FilterGroupItem filterKey="clientes" label="Código do cliente">
+                  <MultiInput
+                    showValueHelpIcon
+                    value={inputCliente}
+                    tokens={filtrosSalvos.clientes.map((codigo) => (
+                      <Token key={codigo} text={codigo} />
+                    ))}
+                    onInput={(e: any) => setInputCliente(e.target.value)}
+                    onKeyDown={(e: any) => {
+                      if (e.key === "Enter") {
+                        const value = inputCliente.trim();
+                        if (!value) return;
+                        if (!filtrosSalvos.clientes.includes(value)) {
+                          atualizarFiltro("clientes", [...filtrosSalvos.clientes, value]);
+                        }
+                        setInputCliente("");
+                      }
+                    }}
+                    onTokenDelete={(e: any) => {
+                      const tokensRemovidos = e.detail.tokens;
+                      const novaLista = filtrosSalvos.clientes.filter((cliente) => !tokensRemovidos.some((t: any) => t.text === cliente));
+                      atualizarFiltro("clientes", novaLista);         
+                    }}
+                    onValueHelpTrigger={() => setOpenCliente(true)}
+                  />
+                </FilterGroupItem>
 
-              <FilterGroupItem filterKey="status" label="Status">
-                <MultiComboBox
-                  onSelectionChange={(e: any) => {
-                    const valores = e.detail.items.map( (i: any) => i.dataset.key );
-                    atualizarFiltro("status", valores);
+                <FilterGroupItem filterKey="status" label="Status">
+                  <MultiComboBox
+                    onSelectionChange={(e: any) => {
+                      const valores = e.detail.items.map( (i: any) => i.dataset.key );
+                      atualizarFiltro("status", valores);
+                    }}
+                  >
+                    {STATUS_PEDIDO_OPTIONS.map((s) => (
+                      <MultiComboBoxItem
+                        key={s.value}
+                        text={s.label}
+                        data-key={s.value}
+                      />
+                    ))}
+                  </MultiComboBox>
+                </FilterGroupItem>
+
+              </FilterBar>
+            </DynamicPageHeader>
+          }
+          titleArea={
+            <DynamicPageTitle
+              heading={
+                <VariantManagement>
+                  <VariantItem selected>
+                    Meus pedidos de venda
+                  </VariantItem>
+                </VariantManagement>
+              }
+            />
+          }
+        >
+          <div style={{ 
+            height: "100%", 
+            boxSizing: "border-box", 
+            padding: "0.5rem 1rem 1rem 1rem",
+            display: "flex",
+            flexDirection: "column"
+          }}>
+            <div
+              style={{
+                background: "var(--sapGroup_ContentBackground)",
+                padding: "0.75rem 1rem",
+                borderRadius: "8px",
+                display: "flex",       
+                flexDirection: "column", 
+                flex: 1,                 
+                overflow: "hidden"
+              }}
+            >
+              <FlexBox justifyContent="SpaceBetween" style={{ marginBottom: "0.5rem" }}>
+                <Title level="H5">Pedidos de vendas</Title>
+                <Button design="Transparent" onClick={() => navigate("/pedido-venda")}>
+                  Criar
+                </Button>
+              </FlexBox>
+
+              <div style={{ flex: 1, overflow: "hidden" }}>
+                <AnalyticalTable
+                  sortable
+                  visibleRows={linhasVisiveis} 
+                  minRows={linhasVisiveis}
+                  selectionBehavior="RowSelector"
+                  loading={loadings.pedidos}
+                  columns={tabelaPedidosVenda}
+                  data={pedidos}
+                  onRowClick={(e: any) => {
+                    if(e.target.dataset.selectionCell === 'true') return;
+                    const pedido = e.detail.row.original;
+                      if (pedido && pedido.numeroDocumento) {
+                        enviarPedidoAtualizacao(pedido.numeroDocumento);
+                      }
                   }}
-                >
-                  {STATUS_PEDIDO_OPTIONS.map((s) => (
-                    <MultiComboBoxItem
-                      key={s.value}
-                      text={s.label}
-                      data-key={s.value}
-                    />
-                  ))}
-                </MultiComboBox>
-              </FilterGroupItem>
+                />
+              </div>
 
-            </FilterBar>
-          </DynamicPageHeader>
-        }
-        titleArea={
-          <DynamicPageTitle
-            heading={
-              <VariantManagement>
-                <VariantItem selected>
-                  Meus pedidos de venda
-                </VariantItem>
-              </VariantManagement>
+              <FlexBox justifyContent="End" style={{ marginTop: "0.5rem" }}>
+                <Title level="H5">
+                  {formatarMoedaBR(totalPedidos)}
+                </Title>
+              </FlexBox>
+            </div>
+          </div>
+        </DynamicPage>
+
+        <PopoverView texto={"Parceiro de negócios"} {...popoverProps} />
+
+        <Dialog
+          open={abrirCard}
+          headerText="Valores Comissionáveis"
+          header={
+          <Bar
+            startContent={<Title>Vendedores</Title>}
+            endContent={
+              <Button
+                design="Transparent"
+                onClick={() =>setAbrirCard(false)}
+              >
+                Fechar
+              </Button>
             }
           />
         }
-      >
-        <div style={{ 
-          height: "100%", 
-          boxSizing: "border-box", 
-          padding: "0.5rem 1rem 1rem 1rem",
-          display: "flex",
-          flexDirection: "column"
-        }}>
-          <div
-            style={{
-              background: "var(--sapGroup_ContentBackground)",
-              padding: "0.75rem 1rem",
-              borderRadius: "8px",
-              display: "flex",       
-              flexDirection: "column", 
-              flex: 1,                 
-              overflow: "hidden"
-            }}
-          >
-            <FlexBox justifyContent="SpaceBetween" style={{ marginBottom: "0.5rem" }}>
-              <Title level="H5">Pedidos de vendas</Title>
-              <Button design="Transparent" onClick={() => navigate("/pedido-venda")}>
-                Criar
-              </Button>
-            </FlexBox>
-
-            <div style={{ flex: 1, overflow: "hidden" }}>
-              <AnalyticalTable
-                sortable
-                visibleRows={linhasVisiveis} 
-                minRows={linhasVisiveis}
-                selectionBehavior="RowSelector"
-                loading={loadings.pedidos}
-                columns={tabelaPedidosVenda}
-                data={pedidos}
-                onRowClick={(e: any) => {
-                  if(e.target.dataset.selectionCell === 'true') return;
-                  const pedido = e.detail.row.original;
-                    if (pedido && pedido.numeroDocumento) {
-                      enviarPedidoAtualizacao(pedido.numeroDocumento);
-                    }
-                }}
-              />
-            </div>
-
-            <FlexBox justifyContent="End" style={{ marginTop: "0.5rem" }}>
-              <Title level="H5">
-                Total:{" "}
-                {totalPedidos.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL"
-                })}
-              </Title>
-            </FlexBox>
-          </div>
-        </div>
-      </DynamicPage>
-
-      <PopoverView texto={"Parceiro de negócios"} {...popoverProps} />
+        >
+        <CardExibicao
+          titulo="Valores Comissionáveis"
+          itens={valoresComissionaveis.map(v => ({
+            titulo: v.nome,
+            descricao: `${v.porcentagemComissao} - ${formatarMoedaBR(v.valorComissao)}`
+          }))}
+        />
+      </Dialog>
     </>
   );
 }
