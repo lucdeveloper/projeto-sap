@@ -1,3 +1,4 @@
+using B1Plus.Api.Servicos.SAP;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using sap.Configuracoes;
@@ -26,6 +27,8 @@ builder.Services.AddScoped<ImpostoService>();
 builder.Services.AddScoped<FilialService>();
 builder.Services.AddScoped<GrupoItemService>();
 builder.Services.AddScoped<AnexoService>();
+builder.Services.AddScoped<VendedorService>();
+builder.Services.AddScoped<PedidoVendedorService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IApiUrlServico, ApiUrlServico>();
 

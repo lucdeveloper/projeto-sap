@@ -10,4 +10,5 @@ public class PedidoVendaDTO
     public int? CodigoAnexo { get; set; }
     public required List<ItemPedidoDTO> Itens { get; set; }
     public List<AnexoPedidoDTO> Anexos { get; set; } = [];
+    public List<int> Vendedores { get; set; } = [];
 }

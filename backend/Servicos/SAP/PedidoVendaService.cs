@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using B1Plus.Api.DTO;
+using B1Plus.Api.Models;
+using B1Plus.Api.Servicos.SAP;
 using sap.Configuracoes;
 using sap.DTO;
 using sap.Models;
@@ -10,11 +12,12 @@ using System.Text;
 
 namespace sap.Servicos.SAP;
 
-public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiroNegocioService, AnexoService anexoService)
+public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiroNegocioService, AnexoService anexoService, PedidoVendedorService pedidoVendedorService)
 {
     private readonly SAPBase _sapBase = sapBase;
     private readonly ParceiroNegocioService _parceiroNegocioService = parceiroNegocioService;
     private readonly AnexoService _anexoService = anexoService;
+    private readonly PedidoVendedorService _pedidoVendedorService = pedidoVendedorService;
 
     public async Task<int> ObterProximoCodigo()
     {
@@ -37,15 +40,32 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
                     DataEntrega = r.GetDateTime(6).ToString("dd/MM/yyyy"),
                     Status = r.GetString(8) == "O" ? "Aberto" : "Fechado",
                     CodigoAnexo = r.IsDBNull(9) ? null : r.GetInt32(9),
-
                 });
 
         lista.ForEach(async (pedido) => {
             pedido.TotalDocumento = await RetornarValorTotalItens(pedido.NumeroDocumento);
             pedido.AnexoExibicao = pedido.CodigoAnexo is null ? [] : await _anexoService.RetornarExibicaoAnexos((int)pedido.CodigoAnexo);
+            pedido.PossuiVendedores = await PossuiVendedores(pedido.NumeroDocumento);
         });
 
         return lista;
+    }
+
+    public async Task<bool> PossuiVendedores(int documentoEntrada)
+    {
+        var query = @"SELECT 
+                        COUNT(*)
+                      FROM ""@LGOPEDIDOVENDA""
+                      WHERE ""U_DocEntryPedido"" = ?";
+
+        var parametro = new OdbcParameter { Value = documentoEntrada };
+
+        var quantidade = await _sapBase.QuerySingle<int>(
+            query,
+            parametro,
+            r => r.GetInt32(0));
+
+        return quantidade > 0;
     }
 
     public async Task<PedidoVendaRetornoDTO> ObterPorDocumentoEntrada(int documentoEntrada)
@@ -62,7 +82,12 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
             
         var pedidoSap = MapearParaSap(pedidoVendaDTO);
         var retornoSap = await _sapBase.CriarRegistro<PedidoVendaRetorno>(SAPRotas.PedidoVendas, pedidoSap);
-        return await MapearParaDTO(retornoSap, anexoRetorno);
+
+        var vendedorRetorno = new PedidoVendedorRetorno();
+        if (pedidoVendaDTO.Vendedores.Count > 0)
+            vendedorRetorno = await _pedidoVendedorService.Criar(pedidoVendaDTO.Vendedores, retornoSap.DocEntry);
+
+        return await MapearParaDTO(retornoSap, anexoRetorno, vendedorRetorno);
     }
 
     public async Task<PedidoVendaRetornoDTO> Editar(int codigo, PedidoVendaEdicaoDTO pedidoVendaEdicaoDTO)
@@ -113,8 +138,12 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
         ///
         /// Esse comportamento altera o PATCH padrão para substituição de coleção.
         /// </remarks>
-        await _sapBase.AtualizarRegistro($"{SAPRotas.PedidoVendas}({codigo})", pedidoSap, true);
+        /// 
 
+        await _sapBase.AtualizarRegistro($"{SAPRotas.PedidoVendas}({codigo})", pedidoSap, true);
+       
+        await _pedidoVendedorService.Editar(codigo, pedidoVendaEdicaoDTO.CodigoVendedores, pedidoVendaEdicaoDTO.Vendedores);
+        
         var pedidoAtualizado = await ObterPedidoVendaPorCodigo(codigo);
         
         return pedidoAtualizado;
@@ -181,7 +210,7 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
         };
     }
 
-    private async Task<PedidoVendaRetornoDTO> MapearParaDTO(PedidoVendaRetorno pedidoVendaRetorno, AnexoRetorno? anexoRetorno)
+    private async Task<PedidoVendaRetornoDTO> MapearParaDTO(PedidoVendaRetorno pedidoVendaRetorno, AnexoRetorno? anexoRetorno, PedidoVendedorRetorno? vendedorRetorno)
     {
         var retornarDadosContato = await _parceiroNegocioService.RetornarPessoasContatoPorCodigo(pedidoVendaRetorno.ContactPersonCode);
 
@@ -195,6 +224,8 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
             Tamanho = anexo.FileSize
         })
         .ToList();
+
+        var vendedores = await _pedidoVendedorService.ObterVendedoresPorDocumentoEntrada(pedidoVendaRetorno.DocEntry);
 
         var pedidoVenda = new PedidoVendaRetornoDTO
         {
@@ -220,7 +251,8 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
                 Preco = documento.UnitPrice,
                 Quantidade = documento.Quantity
             })],
-            Anexos = anexos ?? []
+            Anexos = anexos ?? [],
+            Vendedores = vendedores ?? [],
         };
 
         return pedidoVenda;
@@ -280,11 +312,18 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
                                               })]
                                           })
                                           .FirstOrDefault();
+        if (pedidoVenda is null)
+            return new PedidoVendaRetornoDTO();
 
-        if(pedidoVenda?.CodigoAnexo is not null)
+        if (pedidoVenda.CodigoAnexo is not null)
             pedidoVenda.Anexos = await _anexoService.ObterAnexos((int)pedidoVenda.CodigoAnexo);
 
-        return pedidoVenda is null ? new PedidoVendaRetornoDTO() : pedidoVenda;
+        pedidoVenda.Vendedores = await _pedidoVendedorService.ObterVendedoresPorDocumentoEntrada(pedidoVenda.DocumentoEntrada);
+
+        if (pedidoVenda.Vendedores.Count > 0)
+            pedidoVenda.CodigoVendedores = pedidoVenda.Vendedores.First().DocumentoEntrada;
+
+        return pedidoVenda;
     }
 
     private string MontarQueryProximoPedidoVenda()

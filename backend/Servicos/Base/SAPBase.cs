@@ -57,6 +57,28 @@ public class SAPBase(HttpClient httpClient, IOptions<SAPConfiguracoes> configura
         return objeto ?? throw new Exception(resultado);
     }
 
+    public async Task DeletarRegistro(string url)
+    {
+        async Task<HttpResponseMessage> ExecutarRequisicao()
+        {
+            return await _httpClient.DeleteAsync(url);
+        }
+
+        var resposta = await ExecutarRequisicao();
+
+        if (resposta.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            await LoginAsync();
+            resposta = await ExecutarRequisicao();
+        }
+
+        if (!resposta.IsSuccessStatusCode)
+        {
+            var conteudoErro = await resposta.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Erro ao deletar registro no SAP. Status: {resposta.StatusCode}. Detalhes: {conteudoErro}");
+        }
+    }
+
     public async Task AtualizarRegistro(string url, object data, bool replaceCollectionsOnPatch = false, bool incluirNull = false)
     {
         HttpRequestMessage CriarRequisicao()
@@ -140,7 +162,6 @@ public class SAPBase(HttpClient httpClient, IOptions<SAPConfiguracoes> configura
 
         return default;
     }
-
 
     public async Task<T?> QuerySingle<T>(string query, OdbcParameter? parametro, Func<DbDataReader, T> mapeamento)
     {

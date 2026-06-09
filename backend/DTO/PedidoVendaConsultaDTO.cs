@@ -12,6 +12,7 @@
         public Decimal TotalDocumento { get; set; }
         public string Status { get; set; } = string.Empty;
         public int? CodigoAnexo { get; set; }
+        public bool PossuiVendedores { get; set; }
         public List<AnexoExibicaoDTO> AnexoExibicao { get; set; } = [];
     }
 }
