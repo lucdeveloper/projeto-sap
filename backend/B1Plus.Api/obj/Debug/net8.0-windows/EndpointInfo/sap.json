@@ -1,0 +1,935 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "sap",
+    "version": "1.0"
+  },
+  "paths": {
+    "/Anexo": {
+      "get": {
+        "tags": [
+          "Anexo"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Anexo/buscar": {
+      "get": {
+        "tags": [
+          "Anexo"
+        ],
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "numeroLinha",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Filial": {
+      "get": {
+        "tags": [
+          "Filial"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/GrupoItem": {
+      "post": {
+        "tags": [
+          "GrupoItem"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrupoItemFiltroConsultaDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrupoItemFiltroConsultaDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrupoItemFiltroConsultaDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Imposto": {
+      "post": {
+        "tags": [
+          "Imposto"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImpostoFiltroConsultaDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImpostoFiltroConsultaDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImpostoFiltroConsultaDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Item/{codigo}": {
+      "get": {
+        "tags": [
+          "Item"
+        ],
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Item": {
+      "post": {
+        "tags": [
+          "Item"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItemFiltroConsultaDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItemFiltroConsultaDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItemFiltroConsultaDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/ParceiroNegocio/{codigo}": {
+      "get": {
+        "tags": [
+          "ParceiroNegocio"
+        ],
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/ParceiroNegocio": {
+      "post": {
+        "tags": [
+          "ParceiroNegocio"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParceiroNegociosFiltroConsultaDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParceiroNegociosFiltroConsultaDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParceiroNegociosFiltroConsultaDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/ParceiroNegocio/pessoas-contato": {
+      "post": {
+        "tags": [
+          "ParceiroNegocio"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PessoaContatoFiltroConsultaDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PessoaContatoFiltroConsultaDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PessoaContatoFiltroConsultaDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/PedidoVenda/retornarProximoCodigo": {
+      "get": {
+        "tags": [
+          "PedidoVenda"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/PedidoVenda/{documentoEntrada}": {
+      "get": {
+        "tags": [
+          "PedidoVenda"
+        ],
+        "parameters": [
+          {
+            "name": "documentoEntrada",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/PedidoVenda": {
+      "post": {
+        "tags": [
+          "PedidoVenda"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoVendasFiltroConsultaDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoVendasFiltroConsultaDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoVendasFiltroConsultaDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/PedidoVenda/criar": {
+      "post": {
+        "tags": [
+          "PedidoVenda"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoVendaDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoVendaDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoVendaDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoVendaRetornoDTOApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoVendaRetornoDTOApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoVendaRetornoDTOApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PedidoVenda/editar/{codigo}": {
+      "patch": {
+        "tags": [
+          "PedidoVenda"
+        ],
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoVendaEdicaoDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoVendaEdicaoDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoVendaEdicaoDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoVendaRetornoDTOApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoVendaRetornoDTOApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoVendaRetornoDTOApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnexoPedidoDTO": {
+        "required": [
+          "caminhoDestino",
+          "extensaoArquivo",
+          "nomeArquivo"
+        ],
+        "type": "object",
+        "properties": {
+          "nomeArquivo": {
+            "type": "string",
+            "nullable": true
+          },
+          "extensaoArquivo": {
+            "type": "string",
+            "nullable": true
+          },
+          "caminhoDestino": {
+            "type": "string",
+            "nullable": true
+          },
+          "tamanhoArquivo": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AnexoPedidoEdicaoDTO": {
+        "type": "object",
+        "properties": {
+          "linha": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "caminhoDestino": {
+            "type": "string",
+            "nullable": true
+          },
+          "nomeArquivo": {
+            "type": "string",
+            "nullable": true
+          },
+          "extensaoArquivo": {
+            "type": "string",
+            "nullable": true
+          },
+          "tamanhoArquivo": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AnexoPedidoRetornoDTO": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "linha": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "caminhoDestino": {
+            "type": "string",
+            "nullable": true
+          },
+          "nomeArquivo": {
+            "type": "string",
+            "nullable": true
+          },
+          "extensaoArquivo": {
+            "type": "string",
+            "nullable": true
+          },
+          "tamanho": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GrupoItemFiltroConsultaDTO": {
+        "type": "object",
+        "properties": {
+          "numeros": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "nomes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ImpostoFiltroConsultaDTO": {
+        "type": "object",
+        "properties": {
+          "codigos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "nomes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ItemFiltroConsultaDTO": {
+        "type": "object",
+        "properties": {
+          "numeros": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "grupos": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ItemPedidoDTO": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "imposto": {
+            "type": "string",
+            "nullable": true
+          },
+          "preco": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ItemPedidoEdicaoDTO": {
+        "type": "object",
+        "properties": {
+          "linha": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "item": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "imposto": {
+            "type": "string",
+            "nullable": true
+          },
+          "preco": {
+            "type": "number",
+            "format": "double"
+          },
+          "excluir": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ItemPedidoRetornoDTO": {
+        "type": "object",
+        "properties": {
+          "linha": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "codigo": {
+            "type": "string",
+            "nullable": true
+          },
+          "descricao": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantidade": {
+            "type": "number",
+            "format": "double"
+          },
+          "preco": {
+            "type": "number",
+            "format": "double"
+          },
+          "imposto": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ParceiroNegociosFiltroConsultaDTO": {
+        "type": "object",
+        "properties": {
+          "codigos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "nomes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PedidoVendaDTO": {
+        "required": [
+          "cliente",
+          "dataEntrega",
+          "itens"
+        ],
+        "type": "object",
+        "properties": {
+          "cliente": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataEntrega": {
+            "type": "string",
+            "nullable": true
+          },
+          "empresa": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pessoaContato": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numeroReferenciaCliente": {
+            "type": "string",
+            "nullable": true
+          },
+          "codigoAnexo": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemPedidoDTO"
+            },
+            "nullable": true
+          },
+          "anexos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AnexoPedidoDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PedidoVendaEdicaoDTO": {
+        "required": [
+          "dataEntrega"
+        ],
+        "type": "object",
+        "properties": {
+          "pessoaContato": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "numeroReferenciaCliente": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataEntrega": {
+            "type": "string",
+            "nullable": true
+          },
+          "codigoAnexo": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemPedidoEdicaoDTO"
+            },
+            "nullable": true
+          },
+          "anexos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AnexoPedidoEdicaoDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PedidoVendaRetornoDTO": {
+        "type": "object",
+        "properties": {
+          "documentoEntrada": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "documento": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "codigoCliente": {
+            "type": "string",
+            "nullable": true
+          },
+          "cliente": {
+            "type": "string",
+            "nullable": true
+          },
+          "numeroReferenciaCliente": {
+            "type": "string",
+            "nullable": true
+          },
+          "valorTotalPedido": {
+            "type": "string",
+            "nullable": true
+          },
+          "codigoAnexo": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "dataLancamento": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dataEntrega": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dataDocumento": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "codigoPessoaContato": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "pessoaContato": {
+            "type": "string",
+            "nullable": true
+          },
+          "emailContato": {
+            "type": "string",
+            "nullable": true
+          },
+          "empresa": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemPedidoRetornoDTO"
+            },
+            "nullable": true
+          },
+          "anexos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AnexoPedidoRetornoDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PedidoVendaRetornoDTOApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/PedidoVendaRetornoDTO"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PedidoVendasFiltroConsultaDTO": {
+        "type": "object",
+        "properties": {
+          "documentos": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "clientes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "status": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "dataEntrega": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PessoaContatoFiltroConsultaDTO": {
+        "required": [
+          "cliente"
+        ],
+        "type": "object",
+        "properties": {
+          "cliente": {
+            "type": "string",
+            "nullable": true
+          },
+          "codigos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "nomes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

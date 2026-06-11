@@ -1,0 +1,197 @@
+﻿using B1Plus.Api.Configuracoes;
+using B1Plus.Api.DTO;
+using B1Plus.Api.Helper;
+using B1Plus.Api.Models;
+using B1Plus.Api.Servicos.ApiService;
+using B1Plus.Api.Servicos.Base;
+using System.Data.Odbc;
+
+namespace B1Plus.Api.Servicos.SAP;
+
+public class AnexoService(SAPBase sapBase, IApiUrlServico apiUrlServico)
+{
+    private readonly SAPBase _sapBase = sapBase;
+    private readonly IApiUrlServico _apiUrlServico = apiUrlServico;
+
+    public async Task<AnexoConsultaDTO> BuscarAnexos()
+    {
+        var query = MontarQuery();
+
+        var dadosAnexo = await _sapBase.QuerySingle(query, null,
+                r => new AnexoConsultaDTO
+                {
+                    CaminhoPastaAnexo = r.GetString(0)
+                });
+
+        return dadosAnexo is null ? new AnexoConsultaDTO() : dadosAnexo;
+    }
+
+    public async Task<AnexoArquivoDTO> MontarExibicaoAnexo(int codigo, int numeroLinha)
+    {
+        var dadosConsulta = MontarQueryAnexo(codigo, numeroLinha);
+        var dadosAnexo = await _sapBase.QueryFirstOrDefault(dadosConsulta.Item1, dadosConsulta.Item2,
+            r => new AnexoPedidoRetornoDTO
+            {
+                Codigo = r.GetInt32(0),
+                Linha = r.GetInt32(1),
+                CaminhoDestino = r.GetString(2),
+                NomeArquivo = r.GetString(3),
+                ExtensaoArquivo = r.GetString(4),
+            }) 
+            ?? throw new FileNotFoundException("Anexo não encontrado na base de dados.");
+
+        var caminho = Path.Combine(dadosAnexo.CaminhoDestino, $"{dadosAnexo.NomeArquivo}.{dadosAnexo.ExtensaoArquivo}");
+
+        if (!File.Exists(caminho))
+            throw new FileNotFoundException($"Arquivo físico não encontrado. Caminho: {caminho}");
+        
+        var bytes = await File.ReadAllBytesAsync(caminho);
+
+        return new AnexoArquivoDTO
+        {
+            Bytes = bytes,
+            NomeArquivo = dadosAnexo.NomeArquivo,
+            ContentType = RetornarContentType(dadosAnexo.ExtensaoArquivo)
+        };
+    }
+    
+    public async Task<AnexoRetorno> Criar(List<AnexoPedidoDTO> anexos)
+    {
+        var anexoSap = MapearParaSap(anexos);
+        var retornoSap = await _sapBase.CriarRegistro<AnexoRetorno>(SAPRotas.Anexo, anexoSap);
+        return retornoSap;
+    }
+
+    public async Task Editar(List<AnexoPedidoEdicaoDTO> anexos, int codigoAnexo)
+    {
+        var anexoSap = MapearParaSapEdicao(anexos);
+        await _sapBase.AtualizarRegistro($"{SAPRotas.Anexo}({codigoAnexo})", anexoSap, true);
+    }
+
+    public async Task<List<AnexoPedidoRetornoDTO>> ObterAnexos(int codigoAnexo)
+    {
+        var query = @"SELECT 
+                           T0.""AbsEntry"" AS ""Codigo"",	                       
+                           T0.""Line"" AS ""LinhaAnexo"",
+	                       T0.""srcPath"" AS ""CaminhoDestino"",
+	                       T0.""FileName"" AS ""NomeArquivo"",
+	                       T0.""FileExt"" AS ""ExtensaoArquivo"",
+                           T0.""FileSize"" AS ""Tamanho""
+                      FROM
+	                      ATC1 T0
+                      WHERE
+	                      T0.""AbsEntry"" = ?";
+
+        var parametros = new List<OdbcParameter> { new() { Value = codigoAnexo } };
+
+        var anexos = await _sapBase.QueryParam(query, parametros,
+            r => new AnexoPedidoRetornoDTO
+            {
+                Codigo = r.GetInt32(0),
+                Linha = r.GetInt32(1),
+                CaminhoDestino = r.GetString(2),
+                NomeArquivo = r.GetString(3),
+                ExtensaoArquivo = r.GetString(4),
+                Tamanho = r.IsDBNull(5) ? null : r.GetInt32(5)
+            });
+
+        return anexos;
+    }
+
+    public async Task<List<AnexoExibicaoDTO>> RetornarExibicaoAnexos(int codigoAnexo)
+    {
+        var baseUrl = _apiUrlServico.BaseUrl;
+        var dadosAnexo = await ObterAnexos(codigoAnexo);
+        var exibicao = dadosAnexo.Select((anexo) => new AnexoExibicaoDTO
+        {
+            Codigo = anexo.Codigo,
+            Linha = anexo.Linha,
+            NomeArquivo = anexo.NomeArquivo,
+            TipoArquivo = ContentTypeHelper.Retornar(anexo.ExtensaoArquivo),
+            Url = $"{_apiUrlServico.BaseUrl}/Anexo/buscar?codigo={anexo.Codigo}&numeroLinha={anexo.Linha}"
+        })
+        .ToList();
+            
+        return exibicao;
+    }
+   
+    private string MontarQuery()
+    {
+        var query = @"SELECT ""AttachPath"" AS ""CaminhoAnexo"" FROM OADP o ";
+        return query;
+    }
+
+    private (string, List<OdbcParameter>) MontarQueryAnexo(int codigo, int numeroLinha)
+    {
+        var query = @"SELECT
+	                      ""AbsEntry"" AS ""Codigo"",
+	                      ""Line"" AS ""Linha"",
+	                      ""srcPath"" AS ""CaminhoDestino"",
+	                      ""FileName"" AS ""NomeArquivo"",
+	                      ""FileExt"" AS ""Extensao""
+                      FROM ATC1
+                      WHERE ""AbsEntry"" = ?
+                      AND ""Line"" = ?";
+
+        var parametros = new List<OdbcParameter>
+        {
+            new("AbsEntry", codigo),
+            new("Line", numeroLinha),
+        };
+
+        return (query.ToString(), parametros);
+    }
+
+    private string RetornarContentType(string extensao)
+    {
+        return extensao.ToLower() switch
+        {
+            "png" => "image/png",
+            "jpg" or "jpeg" => "image/jpeg",
+            "pdf" => "application/pdf",
+            "txt" => "text/plain",
+            "doc" => "application/msword",
+            "csv" => "text/csv",
+            _ => "application/octet-stream"
+        };
+    }
+
+    private AnexoCriacao MapearParaSap(List<AnexoPedidoDTO> anexos)
+    {
+        var anexo = new AnexoCriacao
+        {
+            Attachments2_Lines = [.. anexos.Select(anexo =>
+                new AnexoLinhaCriacao
+                {
+                    FileName = anexo.NomeArquivo,
+                    FileExtension = anexo.ExtensaoArquivo,
+                    SourcePath = anexo.CaminhoDestino,
+                    FileSize =  anexo.TamanhoArquivo,
+                    UserID = 1
+                }
+            )]
+        };
+
+        return anexo;
+    }
+
+    private AnexoEdicao MapearParaSapEdicao(List<AnexoPedidoEdicaoDTO> anexos)
+    {
+        var anexo = new AnexoEdicao
+        {
+            Attachments2_Lines = [.. anexos.Select(anexo =>
+                new AnexoLinhaEdicao
+                {
+                    LineNum = anexo.Linha,
+                    FileName = anexo.NomeArquivo,
+                    FileExtension = anexo.ExtensaoArquivo,
+                    SourcePath = anexo.CaminhoDestino,
+                    FileSize =  anexo.TamanhoArquivo,
+                    UserID = 1
+                }
+            )]
+        };
+
+        return anexo;
+    }
+}

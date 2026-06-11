@@ -1,0 +1,254 @@
+[
+  {
+    "ContainingType": "sap.Controllers.AnexoController",
+    "Method": "BuscarAnexos",
+    "RelativePath": "Anexo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "sap.Controllers.AnexoController",
+    "Method": "MontarExibicaoAnexo",
+    "RelativePath": "Anexo/buscar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "codigo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "numeroLinha",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "sap.Controllers.FilialController",
+    "Method": "BuscarAtivos",
+    "RelativePath": "Filial",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "sap.Controllers.GrupoItemController",
+    "Method": "BuscarTodos",
+    "RelativePath": "GrupoItem",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "filtros",
+        "Type": "sap.DTO.GrupoItemFiltroConsultaDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "sap.Controllers.ImpostoController",
+    "Method": "BuscarTodos",
+    "RelativePath": "Imposto",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "filtros",
+        "Type": "sap.DTO.ImpostoFiltroConsultaDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "sap.Controllers.ItemController",
+    "Method": "BuscarTodos",
+    "RelativePath": "Item",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "filtros",
+        "Type": "sap.DTO.ItemFiltroConsultaDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "sap.Controllers.ItemController",
+    "Method": "BuscarPorCodigo",
+    "RelativePath": "Item/{codigo}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "codigo",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "sap.Controllers.ParceiroNegocioController",
+    "Method": "BuscarTodos",
+    "RelativePath": "ParceiroNegocio",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "filtros",
+        "Type": "sap.DTO.ParceiroNegociosFiltroConsultaDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "sap.Controllers.ParceiroNegocioController",
+    "Method": "BuscarPorCodigo",
+    "RelativePath": "ParceiroNegocio/{codigo}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "codigo",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "sap.Controllers.ParceiroNegocioController",
+    "Method": "RetornarPessoasContato",
+    "RelativePath": "ParceiroNegocio/pessoas-contato",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "filtros",
+        "Type": "sap.DTO.PessoaContatoFiltroConsultaDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "sap.Controllers.PedidoVendaController",
+    "Method": "Buscar",
+    "RelativePath": "PedidoVenda",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "filtros",
+        "Type": "sap.DTO.PedidoVendasFiltroConsultaDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "sap.Controllers.PedidoVendaController",
+    "Method": "ObterPorDocumentoEntrada",
+    "RelativePath": "PedidoVenda/{documentoEntrada}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "documentoEntrada",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "sap.Controllers.PedidoVendaController",
+    "Method": "Criar",
+    "RelativePath": "PedidoVenda/criar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pedidoVendaDto",
+        "Type": "sap.DTO.PedidoVendaDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "sap.Servicos.ApiResponse.ApiResponse\u00601[[sap.DTO.PedidoVendaRetornoDTO, sap, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "sap.Controllers.PedidoVendaController",
+    "Method": "Editar",
+    "RelativePath": "PedidoVenda/editar/{codigo}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "codigo",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "pedidoVendaEdicaoDTO",
+        "Type": "sap.DTO.PedidoVendaEdicaoDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "sap.Servicos.ApiResponse.ApiResponse\u00601[[sap.DTO.PedidoVendaRetornoDTO, sap, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "sap.Controllers.PedidoVendaController",
+    "Method": "ObterProximoCodigo",
+    "RelativePath": "PedidoVenda/retornarProximoCodigo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]
