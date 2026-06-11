@@ -26,16 +26,16 @@ namespace B1PlusCreateTables
         public override void Create_Components(CompanyDataConnection p)
         {
             // TABELA PAI
-            CreateUpdate_UserTables("LGOPEDIDOVENDA", "Pedido de Venda", BoUTBTableType.bott_Document);
-            CreateUpdate_UserFields("@LGOPEDIDOVENDA", "DocEntryPedido", "DocEntry Pedido", BoFieldTypes.db_Numeric, BoFldSubTypes.st_None, 11);
+            CreateUpdate_UserTables("LGODPEDIDOVENDA", "Pedido de Venda", BoUTBTableType.bott_Document);
+            CreateUpdate_UserFields("@LGODPEDIDOVENDA", "DocEntryPedido", "DocEntry Pedido", BoFieldTypes.db_Numeric, BoFldSubTypes.st_None, 11);
 
             // TABELA FILHA
-            CreateUpdate_UserTables("LGDPEDIDOVENDEDOR", "Vendedores do Pedido", BoUTBTableType.bott_DocumentLines);
-            CreateUpdate_UserFields("@LGDPEDIDOVENDEDOR", "VendedorCode", "Código do vendedor", BoFieldTypes.db_Numeric, BoFldSubTypes.st_None, 10);
+            CreateUpdate_UserTables("LGOLDPEDIDOVENDEDOR", "Vendedores do Pedido", BoUTBTableType.bott_DocumentLines);
+            CreateUpdate_UserFields("@LGOLDPEDIDOVENDEDOR", "VendedorCode", "Código do vendedor", BoFieldTypes.db_Numeric, BoFldSubTypes.st_None, 10);
 
             // REGISTRO DO UDO
             RegisterOrUpdate_Objects(
-                sCode: "LGOPEDIDOVENDA",
+                sCode: "LGODPEDIDOVENDA",
                 sName: "Pedido Venda Vendedores",
                 eManageSeries: BoYesNoEnum.tNO,
                 eCanCancel: BoYesNoEnum.tNO,
@@ -44,7 +44,7 @@ namespace B1PlusCreateTables
                 eCanCreateDefaultForm: BoYesNoEnum.tNO,
                 eObjectType: BoUDOObjType.boud_Document,
                 bUpdateIfExists: false,
-                ChildTables: new string[] { "LGDPEDIDOVENDEDOR" }
+                ChildTables: new string[] { "LGOLDPEDIDOVENDEDOR" }
             );
         }        
     }

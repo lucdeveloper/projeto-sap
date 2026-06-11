@@ -3,5 +3,5 @@
 public class PedidoVendedorCriacao
 {
     public int U_DocEntryPedido { get; set; }
-    public List<PedidoVendedorLinhasCriacao> LGDPEDIDOVENDEDORCollection { get; set; } = [];
+    public List<PedidoVendedorLinhasCriacao> LGOLDPEDIDOVENDEDORCollection { get; set; } = [];
 }

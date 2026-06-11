@@ -56,8 +56,8 @@ public class VendedorService(SAPBase sapBase)
         var query = new StringBuilder(@"SELECT                                          	
                                             T2.""SlpName"" AS ""Nome"",
                                             T2.""Commission"" ""AS ValorComissao""
-                                        FROM ""@LGOPEDIDOVENDA"" T0
-                                        LEFT JOIN ""@LGDPEDIDOVENDEDOR"" T1
+                                        FROM ""@LGODPEDIDOVENDA"" T0
+                                        LEFT JOIN ""@LGOLDPEDIDOVENDEDOR"" T1
                                             ON T0.""DocEntry"" = T1.""DocEntry""
                                         LEFT JOIN OSLP T2
                                             ON T1.""U_VendedorCode"" = T2.""SlpCode""

@@ -19,8 +19,8 @@ public class PedidoVendedorService(SAPBase sapBase)
                                             T2.""SlpCode"" AS ""Codigo"",
                                             T2.""SlpName"" AS ""Nome"",
                                             T2.""Memo"" AS ""Observacao""
-                                        FROM ""@LGOPEDIDOVENDA"" T0
-                                        INNER JOIN ""@LGDPEDIDOVENDEDOR"" T1
+                                        FROM ""@LGODPEDIDOVENDA"" T0
+                                        INNER JOIN ""@LGOLDPEDIDOVENDEDOR"" T1
                                             ON T0.""DocEntry"" = T1.""DocEntry""
                                         INNER JOIN OSLP T2
                                             ON T1.""U_VendedorCode"" = T2.""SlpCode""
@@ -78,7 +78,7 @@ public class PedidoVendedorService(SAPBase sapBase)
         return new PedidoVendedorCriacao
         {
             U_DocEntryPedido = documentoEntrada,
-            LGDPEDIDOVENDEDORCollection = [ .. vendedores.Select(vendedor =>  new PedidoVendedorLinhasCriacao { U_VendedorCode = vendedor })]
+            LGOLDPEDIDOVENDEDORCollection = [ .. vendedores.Select(vendedor =>  new PedidoVendedorLinhasCriacao { U_VendedorCode = vendedor })]
         };
     }
 
@@ -86,7 +86,7 @@ public class PedidoVendedorService(SAPBase sapBase)
     {
         return new PedidoVendedorEdicao
         {
-            LGDPEDIDOVENDEDORCollection = [.. vendedores.Select(vendedor => new PedidoVendedorLinhasEdicao
+            LGOLDPEDIDOVENDEDORCollection = [.. vendedores.Select(vendedor => new PedidoVendedorLinhasEdicao
         {
             LineId = vendedor.Linha,
             U_VendedorCode = vendedor.Codigo

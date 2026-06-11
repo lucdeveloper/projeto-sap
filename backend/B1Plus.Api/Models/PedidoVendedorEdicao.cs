@@ -2,5 +2,5 @@
 
 public class PedidoVendedorEdicao
 {
-    public List<PedidoVendedorLinhasEdicao> LGDPEDIDOVENDEDORCollection { get; set; } = [];
+    public List<PedidoVendedorLinhasEdicao> LGOLDPEDIDOVENDEDORCollection { get; set; } = [];
 }

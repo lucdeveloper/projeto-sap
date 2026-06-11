@@ -52,7 +52,7 @@ public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiro
     {
         var query = @"SELECT 
                         COUNT(*)
-                      FROM ""@LGOPEDIDOVENDA""
+                      FROM ""@LGODPEDIDOVENDA""
                       WHERE ""U_DocEntryPedido"" = ?";
 
         var parametro = new OdbcParameter { Value = documentoEntrada };
