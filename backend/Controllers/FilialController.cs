@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using B1Plus.Api.Servicos.SAP;
+using Microsoft.AspNetCore.Mvc;
 
-using sap.Servicos.SAP;
-
-namespace sap.Controllers;
+namespace B1Plus.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]

@@ -1,4 +1,4 @@
-﻿namespace sap.Configuracoes
+﻿namespace B1Plus.Api.Configuracoes
 {
     public class SAPConfiguracoes
     {

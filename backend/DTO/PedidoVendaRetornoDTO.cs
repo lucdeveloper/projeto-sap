@@ -1,6 +1,4 @@
-﻿using B1Plus.Api.DTO;
-
-namespace sap.DTO;
+﻿namespace B1Plus.Api.DTO;
 
 public class PedidoVendaRetornoDTO
 {

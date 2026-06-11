@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using sap.DTO;
-using sap.Servicos.SAP;
+﻿using B1Plus.Api.DTO;
+using B1Plus.Api.Servicos.SAP;
+using Microsoft.AspNetCore.Mvc;
 
-namespace sap.Controllers;
+namespace B1Plus.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]

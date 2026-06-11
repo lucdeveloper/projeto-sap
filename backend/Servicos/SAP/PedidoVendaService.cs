@@ -1,16 +1,13 @@
-﻿using B1Plus.Api.DTO;
+﻿using B1Plus.Api.Configuracoes;
+using B1Plus.Api.DTO;
 using B1Plus.Api.Models;
-using B1Plus.Api.Servicos.SAP;
-using sap.Configuracoes;
-using sap.DTO;
-using sap.Models;
-using sap.Servicos.Base;
+using B1Plus.Api.Servicos.Base;
 using System.Data;
 using System.Data.Odbc;
 using System.Globalization;
 using System.Text;
 
-namespace sap.Servicos.SAP;
+namespace B1Plus.Api.Servicos.SAP;
 
 public class PedidoVendaService(SAPBase sapBase, ParceiroNegocioService parceiroNegocioService, AnexoService anexoService, PedidoVendedorService pedidoVendedorService)
 {

@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
-using sap.Servicos.SAPException;
+using B1Plus.Api.Servicos.SAPException;
 
-namespace sap.Helper;
+namespace B1Plus.Api.Helper;
 
 public static class SapErrorParser
 {

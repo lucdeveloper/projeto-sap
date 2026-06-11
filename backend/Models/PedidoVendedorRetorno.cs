@@ -1,6 +1,4 @@
-﻿using sap.Models;
-
-namespace B1Plus.Api.Models;
+﻿namespace B1Plus.Api.Models;
 
 public class PedidoVendedorRetorno
 {

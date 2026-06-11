@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace sap.Models;
+namespace B1Plus.Api.Models;
 
 public class PedidoVendaItemEdicao
 {

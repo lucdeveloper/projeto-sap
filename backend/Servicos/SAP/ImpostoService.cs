@@ -1,9 +1,9 @@
-﻿using sap.DTO;
-using sap.Servicos.Base;
+﻿using B1Plus.Api.DTO;
+using B1Plus.Api.Servicos.Base;
 using System.Data.Odbc;
 using System.Text;
 
-namespace sap.Servicos.SAP;
+namespace B1Plus.Api.Servicos.SAP;
 
 public class ImpostoService(SAPBase sapBase)
 {

@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace sap.Extensions;
+namespace B1Plus.Api.Extensions;
 
 public static class MoedaExtensions
 {

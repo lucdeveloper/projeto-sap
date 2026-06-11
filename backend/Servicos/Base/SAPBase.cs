@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Options;
+﻿using B1Plus.Api.Configuracoes;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using sap.Configuracoes;
 using System.Data.Common;
 using System.Data.Odbc;
 using System.Net;
 using System.Text;
 
-namespace sap.Servicos.Base;
+namespace B1Plus.Api.Servicos.Base;
 
 public class SAPBase(HttpClient httpClient, IOptions<SAPConfiguracoes> configuracoes, IOptions<StringConexaoConfiguracao> stringConexao)
 {

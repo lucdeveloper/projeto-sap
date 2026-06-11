@@ -1,6 +1,6 @@
-﻿using sap.Servicos.ApiResponse;
+﻿using B1Plus.Api.Servicos.ApiResponse;
 
-namespace sap.Helper
+namespace B1Plus.Api.Helper
 {
     public static class ApiResponseHelper
     {

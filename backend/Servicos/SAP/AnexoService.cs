@@ -1,12 +1,12 @@
-﻿using sap.Configuracoes;
-using sap.DTO;
-using sap.Helper;
-using sap.Models;
-using sap.Servicos.ApiService;
-using sap.Servicos.Base;
+﻿using B1Plus.Api.Configuracoes;
+using B1Plus.Api.DTO;
+using B1Plus.Api.Helper;
+using B1Plus.Api.Models;
+using B1Plus.Api.Servicos.ApiService;
+using B1Plus.Api.Servicos.Base;
 using System.Data.Odbc;
 
-namespace sap.Servicos.SAP;
+namespace B1Plus.Api.Servicos.SAP;
 
 public class AnexoService(SAPBase sapBase, IApiUrlServico apiUrlServico)
 {

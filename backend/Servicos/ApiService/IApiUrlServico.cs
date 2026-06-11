@@ -1,4 +1,4 @@
-﻿namespace sap.Servicos.ApiService;
+﻿namespace B1Plus.Api.Servicos.ApiService;
 
 public interface IApiUrlServico
 {

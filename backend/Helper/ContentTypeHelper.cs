@@ -1,4 +1,4 @@
-﻿namespace sap.Helper;
+﻿namespace B1Plus.Api.Helper;
 
 public static class ContentTypeHelper
 {

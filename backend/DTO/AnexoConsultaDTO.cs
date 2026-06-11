@@ -1,4 +1,4 @@
-﻿namespace sap.DTO;
+﻿namespace B1Plus.Api.DTO;
 
 public class AnexoConsultaDTO
 {

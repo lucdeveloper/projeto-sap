@@ -1,4 +1,4 @@
-﻿namespace sap.Servicos.SAPException;
+﻿namespace B1Plus.Api.Servicos.SAPException;
 
 public class SapError
 {

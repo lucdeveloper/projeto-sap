@@ -1,4 +1,4 @@
-﻿namespace sap.Servicos.ApiResponse;
+﻿namespace B1Plus.Api.Servicos.ApiResponse;
 
 public class ApiResponse<T>
 {

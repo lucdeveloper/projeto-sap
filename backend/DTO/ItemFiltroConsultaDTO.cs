@@ -1,6 +1,6 @@
 ﻿using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace sap.DTO;
+namespace B1Plus.Api.DTO;
 
 public class ItemFiltroConsultaDTO
 {
