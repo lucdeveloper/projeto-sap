@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("B1Plus.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+08c85b668d6aa55db2a12579e35b9edc6b7f7273")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c6922d8ce3d09d523ae2ff0d7ee002aebe87ab82")]
 [assembly: System.Reflection.AssemblyProductAttribute("B1Plus.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("B1Plus.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

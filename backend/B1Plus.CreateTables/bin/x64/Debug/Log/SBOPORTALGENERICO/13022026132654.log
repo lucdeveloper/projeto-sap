@@ -1,0 +1,42 @@
+13:26:54	[AVISO]	CREATETABLE - Criação de Tabelas versão 1.0.0
+13:26:54	[AVISO]	Conectando com a base de dados SBOPORTALGENERICO
+13:26:58	[ERRO]	A criação da tabela [LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:27:01	[ERRO]	A criação do campo [ID_DPTS] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:27:03	[ERRO]	A criação do campo [NAME] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:27:06	[ERRO]	A criação do campo [LASTNAME] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:27:09	[ERRO]	A criação do campo [CPF] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:27:11	[ERRO]	A criação do campo [TEL] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:27:14	[ERRO]	A criação do campo [DPT] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:27:16	[ERRO]	A criação do campo [ID_ATT] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:27:19	[ERRO]	A criação do campo [CODE_DPT] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:27:19	[AVISO]	A tabela [LGOLCTABELADPT] já existe na base de dados.
+13:27:19	[AVISO]	O campo [CODE] já existe na tabela [@LGOLCTABELADPT].
+13:27:19	[AVISO]	O campo [NAME] já existe na tabela [@LGOLCTABELADPT].
+13:27:19	[AVISO]	O campo [CODE_DPT] já existe na tabela [@LGOLCTABELADPT].
+13:27:19	[AVISO]	O campo [DPT] já existe na tabela [@LGOLCTABELADPT].
+13:27:19	[AVISO]	O campo [ID_DPTS] já existe na tabela [@LGOLCTABELADPT].
+13:27:23	[ERRO]	A remoção do campo [CODE_DPT] na tabela [@LGOLCTABELADPT] apresentou o seguinte erro: ([SAP AG][LIBODBCHDB DLL][HDBODBC] Integrity constraint violation;301 unique constraint violated: Table(CUFD), Index(CUFD_ALIAS) with error: unique constraint violation for table SBOPORTALGENERICO:CUFD$delta_1$en, constraint='$uc_CUFD_ALIAS$', key value='15,@LGOCTABELAFUNC;9', pos=0, indexname=CUFD_ALIAS).
+13:27:23	[AVISO]	O objeto [LGOCTabelaFunc] já existe na base de dados
+13:27:26	[SUCESSO]	O campo [DPT] na tabela [@LGOLCTABELADPT] foi removido com sucesso.
+13:27:26	[RESUMO]	*************************
+13:27:26	[RESUMO]	TABELAS CRIADAS:        0
+13:27:26	[RESUMO]	TABELAS ATUALIZADAS:    0
+13:27:26	[RESUMO]	TABELAS REMOVIDAS:      0
+13:27:26	[RESUMO]	CAMPOS CRIADOS:         0
+13:27:26	[RESUMO]	CAMPOS ATUALIZADOS:     0
+13:27:26	[RESUMO]	CAMPOS REMOVIDOS:       1
+13:27:26	[RESUMO]	OBJETOS CRIADOS:        0
+13:27:26	[RESUMO]	OBJETOS ATUALIZADOS:    0
+13:27:26	[RESUMO]	OBJETOS REMOVIDOS:      0
+13:27:26	[RESUMO]	USERKEYS CRIADAS:       0
+13:27:26	[RESUMO]	USERKEYS REMOVIDAS:     0
+13:27:26	[RESUMO]	SCRYPTS EXECUTADOS:     0
+13:27:26	[RESUMO]	CONSULTAS CRIADAS:      0
+13:27:26	[RESUMO]	CONSULTAS ATUALIZADAS:  0
+13:27:26	[RESUMO]	CONSULTAS REMOVIDAS:    0
+13:27:26	[RESUMO]	PESQUISA CRIADAS:       0
+13:27:26	[RESUMO]	PESQUISA ATUALIZADAS:   0
+13:27:26	[RESUMO]	PESQUISA REMOVIDAS:     0
+13:27:26	[RESUMO]	PERMISSÕES CRIADAS:     0
+13:27:26	[RESUMO]	PERMISSÕES ATUALIZADAS: 0
+13:27:26	[RESUMO]	PERMISSÕES REMOVIDAS:   0

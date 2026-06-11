@@ -1,0 +1,30 @@
+21:37:39	[AVISO]	CREATETABLE - Criação de Tabelas versão 1.0.0
+21:37:39	[AVISO]	Conectando com a base de dados SBOPORTALGENERICO
+21:37:44	[ERRO]	A criação da tabela [LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+21:37:47	[ERRO]	A criação do campo [NAME] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+21:37:51	[ERRO]	A criação do campo [LASTNAME] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+21:37:55	[ERRO]	A criação do campo [CPF] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+21:37:59	[ERRO]	A criação do campo [TEL] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+21:38:00	[AVISO]	O objeto [LGOCTabelaFunc] já existe na base de dados
+21:38:00	[RESUMO]	*************************
+21:38:00	[RESUMO]	TABELAS CRIADAS:        0
+21:38:00	[RESUMO]	TABELAS ATUALIZADAS:    0
+21:38:00	[RESUMO]	TABELAS REMOVIDAS:      0
+21:38:00	[RESUMO]	CAMPOS CRIADOS:         0
+21:38:00	[RESUMO]	CAMPOS ATUALIZADOS:     0
+21:38:00	[RESUMO]	CAMPOS REMOVIDOS:       0
+21:38:00	[RESUMO]	OBJETOS CRIADOS:        0
+21:38:00	[RESUMO]	OBJETOS ATUALIZADOS:    0
+21:38:00	[RESUMO]	OBJETOS REMOVIDOS:      0
+21:38:00	[RESUMO]	USERKEYS CRIADAS:       0
+21:38:00	[RESUMO]	USERKEYS REMOVIDAS:     0
+21:38:00	[RESUMO]	SCRYPTS EXECUTADOS:     0
+21:38:00	[RESUMO]	CONSULTAS CRIADAS:      0
+21:38:00	[RESUMO]	CONSULTAS ATUALIZADAS:  0
+21:38:00	[RESUMO]	CONSULTAS REMOVIDAS:    0
+21:38:00	[RESUMO]	PESQUISA CRIADAS:       0
+21:38:00	[RESUMO]	PESQUISA ATUALIZADAS:   0
+21:38:00	[RESUMO]	PESQUISA REMOVIDAS:     0
+21:38:00	[RESUMO]	PERMISSÕES CRIADAS:     0
+21:38:00	[RESUMO]	PERMISSÕES ATUALIZADAS: 0
+21:38:00	[RESUMO]	PERMISSÕES REMOVIDAS:   0

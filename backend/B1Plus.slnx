@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="B1Plus.Api\B1Plus.Api.csproj" />
+  <Project Path="B1Plus.CreateTables\B1Plus.CreateTables.csproj" Id="8fa7606d-b1d8-4ab8-91ed-08d3626f7afa">
+    <Platform Solution="Debug|*" Project="x64" />
+  </Project>
+</Solution>
