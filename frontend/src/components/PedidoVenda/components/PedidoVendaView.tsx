@@ -32,6 +32,7 @@ import { useMemo } from 'react';
 import { DialogMensagem } from '../../DialogMensagem.tsx';
 import { AnexoIconeHelper } from '../../../utils/anexoHelper.ts';
 import { useAnexoContext } from '../../../contexts/anexoContext.tsx';
+import { useVendedorPopover } from '../../../hooks/Popover/useVendedorPopover.ts';
 
 interface PedidoVendaViewProps {
     dados?: PedidoVendaRetornoDTO | null; 
@@ -42,6 +43,7 @@ interface PedidoVendaViewProps {
 export function PedidoVendaView({ dados, onNovoPedido, onEditar }: PedidoVendaViewProps ) {
     const { abrirCliente, popoverProps: clienteProps } = useClientePopover();
     const { abrirItem, popoverProps: itemProps } = useItemPopover();
+    const { abrirVendedor, popoverProps: vendedorProps } = useVendedorPopover();
     const {mensagem, setMensagem, loading: loadinAnexo, exibirAnexo } = useAnexoContext();
        
     if (!dados) return null;
@@ -187,7 +189,7 @@ return (
                                     </TableCell>
 
                                     <TableCell>
-                                            <FlexBox alignItems="Center" style={{ gap: "0.25rem" }}>
+                                        <FlexBox alignItems="Center" style={{ gap: "0.25rem" }}>
                                             <Icon name="feeder-arrow" style={{ color: "#ff9306" }} />
                                             <Link wrappingType="None" onClick={(e) => abrirItem(e.target, item.codigo)}>{item.codigo}</Link>
                                         </FlexBox>
@@ -242,7 +244,10 @@ return (
                                     </TableCell>
 
                                     <TableCell>
-                                       <Text>{linha.codigo}</Text>
+                                       <FlexBox alignItems="Center" style={{ gap: "0.25rem" }}>
+                                            <Icon name="feeder-arrow" style={{ color: "#ff9306" }} />
+                                            <Link wrappingType="None" onClick={(e) => abrirVendedor(e.target, linha.codigo)}>{linha.codigo}</Link>
+                                        </FlexBox>
                                     </TableCell>
                                     <TableCell>
                                         <Text>{linha.nome || ""}</Text>
@@ -317,6 +322,12 @@ return (
        <PopoverView
             texto={"Item"}
             {...itemProps}
+        >
+        </PopoverView>
+
+        <PopoverView
+            texto={"Vendedor"}
+            {...vendedorProps}
         >
         </PopoverView>
 

@@ -135,6 +135,7 @@ export function ConsultaPedidoVenda() {
           return (
             <Button
               design="Transparent"
+              tooltip="Detalhes"
               icon="slim-arrow-right"
               onClick={(e: any) => {
                 e.stopPropagation();
@@ -223,7 +224,6 @@ export function ConsultaPedidoVenda() {
     return () => window.removeEventListener("resize", atualizarLinhasPorAltura);
   }, []);
 
- 
   return (
     <>
         <DialogSelecao  
@@ -453,7 +453,7 @@ export function ConsultaPedidoVenda() {
               }}
             >
               <FlexBox justifyContent="SpaceBetween" style={{ marginBottom: "0.5rem" }}>
-                <Title level="H5">Pedidos de vendas</Title>
+                <Title level="H5">Pedidos de venda</Title>
                 <Button design="Transparent" onClick={() => navigate("/pedido-venda")}>
                   Criar
                 </Button>
@@ -512,6 +512,17 @@ export function ConsultaPedidoVenda() {
             titulo: v.nome,
             descricao: `${v.porcentagemComissao} - ${formatarMoedaBR(v.valorComissao)}`
           }))}
+          footer={
+    <>
+      Total Comissão:{" "}
+          {formatarMoedaBR(
+            valoresComissionaveis.reduce(
+              (total, item) => total + item.valorComissao,
+              0
+            )
+          )}
+        </>
+      }
         />
       </Dialog>
     </>
