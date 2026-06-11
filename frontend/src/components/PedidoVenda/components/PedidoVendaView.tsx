@@ -59,7 +59,7 @@ export function PedidoVendaView({ dados, onNovoPedido, onEditar }: PedidoVendaVi
 return (
     <>
         <ObjectPage
-            mode= "IconTabBar"
+            mode= "Default"
             headerPinned
             hidePinButton 
             selectedSectionId="geral"

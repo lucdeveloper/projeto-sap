@@ -1,11 +1,12 @@
 import { Avatar, Button, NavigationLayout, ShellBar, SideNavigation , SideNavigationItem, SideNavigationSubItem } from "@ui5/webcomponents-react";
 import { useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 
 
 export function Navegacao( ) {
    const [hideMenu, setHideMenu] = useState(true);
    const navigate = useNavigate();
+   const location = useLocation();
    const exibirBotaoVoltar = location.pathname !== "/";
 
     const menu = [
@@ -73,7 +74,13 @@ export function Navegacao( ) {
                                     />
                                 )}
                                 
-                                <Button icon="menu" onClick={() => setHideMenu(prev => !prev)}/>
+                                <Button 
+                                    icon="menu" 
+                                    onClick={(e) => {
+                                        e.stopPropagation();        
+                                        setHideMenu(prev => !prev)
+                                    }} 
+                                />
                             </>
                         }
                     />

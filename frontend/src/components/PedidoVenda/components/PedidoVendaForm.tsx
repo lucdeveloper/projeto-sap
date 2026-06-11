@@ -1355,7 +1355,7 @@ export function PedidoVendaForm({ onSucesso, onCancelar, dadosEdicao, ehEdicao }
                         }
                     />
                     }
-                    mode="IconTabBar"
+                    mode="Default"
                     headerPinned
                     hidePinButton 
                     selectedSectionId="geral" 
