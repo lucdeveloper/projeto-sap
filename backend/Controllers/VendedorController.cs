@@ -17,6 +17,13 @@ public class VendedorController(VendedorService vendedorService) : Controller
         return Ok(vendedores);
     }
 
+    [HttpGet("{codigo}")]
+    public async Task<IActionResult> BuscarPorCodigo(int codigo)
+    {
+        var vendedor = await _vendedorService.BuscarPorCodigo(codigo);
+        return Ok(vendedor);
+    }
+
     [HttpGet("obterValorComissionavel/{documentoEntrada}")]
     public async Task<IActionResult> ObterValorComissionavelPedidoVenda(int documentoEntrada)
     {

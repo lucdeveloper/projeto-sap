@@ -1,0 +1,40 @@
+13:32:52	[AVISO]	CREATETABLE - Criação de Tabelas versão 1.0.0
+13:32:52	[AVISO]	Conectando com a base de dados SBOPORTALGENERICO
+13:32:57	[ERRO]	A criação da tabela [LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:32:59	[ERRO]	A criação do campo [ID_DPTS] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:33:02	[ERRO]	A criação do campo [NAME] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:33:05	[ERRO]	A criação do campo [LASTNAME] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:33:08	[ERRO]	A criação do campo [CPF] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:33:10	[ERRO]	A criação do campo [TEL] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:33:13	[ERRO]	A criação do campo [DPT] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:33:16	[ERRO]	A criação do campo [ID_ATT] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:33:19	[ERRO]	A criação do campo [CODE_DPT] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:33:19	[AVISO]	A tabela [LGOLCTABELADPT] já existe na base de dados.
+13:33:19	[AVISO]	O campo [CODE] já existe na tabela [@LGOLCTABELADPT].
+13:33:19	[AVISO]	O campo [NAME] já existe na tabela [@LGOLCTABELADPT].
+13:33:19	[AVISO]	O campo [CODE_DPT] já existe na tabela [@LGOLCTABELADPT].
+13:33:22	[SUCESSO]	O campo [DPT] na tabela [@LGOLCTABELADPT] foi criado com sucesso.
+13:33:22	[AVISO]	O campo [ID_DPTS] já existe na tabela [@LGOLCTABELADPT].
+13:33:23	[AVISO]	O objeto [LGOCTabelaFunc] já existe na base de dados
+13:33:23	[RESUMO]	*************************
+13:33:23	[RESUMO]	TABELAS CRIADAS:        0
+13:33:23	[RESUMO]	TABELAS ATUALIZADAS:    0
+13:33:23	[RESUMO]	TABELAS REMOVIDAS:      0
+13:33:23	[RESUMO]	CAMPOS CRIADOS:         1
+13:33:23	[RESUMO]	CAMPOS ATUALIZADOS:     0
+13:33:23	[RESUMO]	CAMPOS REMOVIDOS:       0
+13:33:23	[RESUMO]	OBJETOS CRIADOS:        0
+13:33:23	[RESUMO]	OBJETOS ATUALIZADOS:    0
+13:33:23	[RESUMO]	OBJETOS REMOVIDOS:      0
+13:33:23	[RESUMO]	USERKEYS CRIADAS:       0
+13:33:23	[RESUMO]	USERKEYS REMOVIDAS:     0
+13:33:23	[RESUMO]	SCRYPTS EXECUTADOS:     0
+13:33:23	[RESUMO]	CONSULTAS CRIADAS:      0
+13:33:23	[RESUMO]	CONSULTAS ATUALIZADAS:  0
+13:33:23	[RESUMO]	CONSULTAS REMOVIDAS:    0
+13:33:23	[RESUMO]	PESQUISA CRIADAS:       0
+13:33:23	[RESUMO]	PESQUISA ATUALIZADAS:   0
+13:33:23	[RESUMO]	PESQUISA REMOVIDAS:     0
+13:33:23	[RESUMO]	PERMISSÕES CRIADAS:     0
+13:33:23	[RESUMO]	PERMISSÕES ATUALIZADAS: 0
+13:33:23	[RESUMO]	PERMISSÕES REMOVIDAS:   0

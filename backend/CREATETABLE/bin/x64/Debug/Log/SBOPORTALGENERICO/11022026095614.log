@@ -1,0 +1,38 @@
+09:56:14	[AVISO]	CREATETABLE - Criação de Tabelas versão 1.0.0
+09:56:14	[AVISO]	Conectando com a base de dados SBOPORTALGENERICO
+09:56:20	[ERRO]	A criação da tabela [LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+09:56:23	[ERRO]	A criação do campo [NAME] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+09:56:26	[ERRO]	A criação do campo [LASTNAME] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+09:56:30	[ERRO]	A criação do campo [CPF] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+09:56:34	[ERRO]	A criação do campo [TEL] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+09:56:37	[ERRO]	A criação do campo [DPT] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+09:56:41	[ERRO]	A criação do campo [ID_ATT] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+09:56:45	[ERRO]	A criação do campo [CODE_DPT] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+09:56:49	[SUCESSO]	A tabela [LGOLCTABELADPT] foi criada com sucesso.
+09:56:54	[SUCESSO]	O campo [CODE] na tabela [@LGOLCTABELADPT] foi criado com sucesso.
+09:56:58	[SUCESSO]	O campo [NAME] na tabela [@LGOLCTABELADPT] foi criado com sucesso.
+09:57:03	[SUCESSO]	O campo [CODE_DPT] na tabela [@LGOLCTABELADPT] foi criado com sucesso.
+09:57:07	[SUCESSO]	O campo [DPT] na tabela [@LGOLCTABELADPT] foi criado com sucesso.
+09:57:08	[ERRO]	Ao atualizar o registro do objeto [LGOCTabelaFunc] o seguinte erro foi encontrado: ( [UDO2.ColAlias][line: 5] , 'Coluna inválida na tabela @LGOCTABELAFUNC').
+09:57:08	[RESUMO]	*************************
+09:57:08	[RESUMO]	TABELAS CRIADAS:        1
+09:57:08	[RESUMO]	TABELAS ATUALIZADAS:    0
+09:57:08	[RESUMO]	TABELAS REMOVIDAS:      0
+09:57:08	[RESUMO]	CAMPOS CRIADOS:         4
+09:57:08	[RESUMO]	CAMPOS ATUALIZADOS:     0
+09:57:08	[RESUMO]	CAMPOS REMOVIDOS:       0
+09:57:08	[RESUMO]	OBJETOS CRIADOS:        0
+09:57:08	[RESUMO]	OBJETOS ATUALIZADOS:    0
+09:57:08	[RESUMO]	OBJETOS REMOVIDOS:      0
+09:57:08	[RESUMO]	USERKEYS CRIADAS:       0
+09:57:08	[RESUMO]	USERKEYS REMOVIDAS:     0
+09:57:08	[RESUMO]	SCRYPTS EXECUTADOS:     0
+09:57:08	[RESUMO]	CONSULTAS CRIADAS:      0
+09:57:08	[RESUMO]	CONSULTAS ATUALIZADAS:  0
+09:57:08	[RESUMO]	CONSULTAS REMOVIDAS:    0
+09:57:08	[RESUMO]	PESQUISA CRIADAS:       0
+09:57:08	[RESUMO]	PESQUISA ATUALIZADAS:   0
+09:57:08	[RESUMO]	PESQUISA REMOVIDAS:     0
+09:57:08	[RESUMO]	PERMISSÕES CRIADAS:     0
+09:57:08	[RESUMO]	PERMISSÕES ATUALIZADAS: 0
+09:57:08	[RESUMO]	PERMISSÕES REMOVIDAS:   0

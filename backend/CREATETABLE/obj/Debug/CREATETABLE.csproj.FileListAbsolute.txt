@@ -1,0 +1,87 @@
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CREATETABLE.exe.config
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CREATETABLE.exe
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CREATETABLE.pdb
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\LGSapB1.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\C1.Win.Olap.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.Windows.Forms.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.CrystalReports.Engine.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.Shared.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\C1.C1Pdf.2.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\C1.Win.C1Chart.2.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\C1.Win.C1FlexGrid.2.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportSource.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\AxShockwaveFlashObjects.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.DataDefModel.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.ClientDoc.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.ReportDefModel.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.Controllers.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.CommLayer.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.DataSetConversion.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.Prompting.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.XmlSerialize.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.CubeDefModel.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.CommonObjectModel.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.ObjectFactory.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\ShockwaveFlashObjects.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.CommonControls.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\stdole.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\C1.Win.Olap.xml
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\C1.C1Pdf.2.xml
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\C1.Win.C1Chart.2.xml
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\C1.Win.C1FlexGrid.2.xml
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\de\C1.Win.Olap.resources.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\es\C1.Win.Olap.resources.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\fr\C1.Win.Olap.resources.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\ja\C1.Win.Olap.resources.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\pt\C1.Win.Olap.resources.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\bin\Debug\tr\C1.Win.Olap.resources.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\obj\Debug\CREATETABLE.csproj.AssemblyReference.cache
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\obj\Debug\Interop.SAPbobsCOM.dll
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\obj\Debug\CREATETABLE.csproj.ResolveComReference.cache
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\obj\Debug\CREATETABLE.csproj.CoreCompileInputs.cache
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\obj\Debug\CREATETA.7726788E.Up2Date
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\obj\Debug\CREATETABLE.exe
+C:\Users\miguel.costa\source\repos\ITEMSAPI\CREATETABLE\obj\Debug\CREATETABLE.pdb
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CREATETABLE.exe.config
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CREATETABLE.exe
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CREATETABLE.pdb
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\C1.Win.Olap.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.Windows.Forms.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.CrystalReports.Engine.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.Shared.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\C1.C1Pdf.2.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\C1.Win.C1Chart.2.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\C1.Win.C1FlexGrid.2.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportSource.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\AxShockwaveFlashObjects.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.DataDefModel.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.ClientDoc.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.ReportDefModel.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.Controllers.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.CommLayer.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.DataSetConversion.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.Prompting.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.XmlSerialize.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.CubeDefModel.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.CommonObjectModel.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.ObjectFactory.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\ShockwaveFlashObjects.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\CrystalDecisions.ReportAppServer.CommonControls.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\stdole.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\C1.Win.Olap.xml
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\C1.C1Pdf.2.xml
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\C1.Win.C1Chart.2.xml
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\C1.Win.C1FlexGrid.2.xml
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\de\C1.Win.Olap.resources.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\es\C1.Win.Olap.resources.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\fr\C1.Win.Olap.resources.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\ja\C1.Win.Olap.resources.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\pt\C1.Win.Olap.resources.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\bin\Debug\tr\C1.Win.Olap.resources.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\obj\Debug\CREATETABLE.csproj.AssemblyReference.cache
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\obj\Debug\Interop.SAPbobsCOM.dll
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\obj\Debug\CREATETABLE.csproj.ResolveComReference.cache
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\obj\Debug\CREATETABLE.csproj.CoreCompileInputs.cache
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\obj\Debug\CREATETA.7726788E.Up2Date
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\obj\Debug\CREATETABLE.exe
+C:\Users\lucas.ferreira\Desktop\ITEMSAPI 1\ITEMSAPI\CREATETABLE\obj\Debug\CREATETABLE.pdb

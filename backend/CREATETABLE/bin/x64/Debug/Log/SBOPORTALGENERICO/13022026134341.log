@@ -1,0 +1,42 @@
+13:43:41	[AVISO]	CREATETABLE - Criação de Tabelas versão 1.0.0
+13:43:41	[AVISO]	Conectando com a base de dados SBOPORTALGENERICO
+13:43:46	[ERRO]	A criação da tabela [LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:43:48	[ERRO]	A criação do campo [ID_DPTS] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:43:51	[ERRO]	A criação do campo [NAME] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:43:54	[ERRO]	A criação do campo [LASTNAME] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:43:58	[ERRO]	A criação do campo [CPF] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:44:01	[ERRO]	A criação do campo [TEL] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:44:05	[SUCESSO]	O campo [DPT] na tabela [@LGOCTabelaFunc] foi criado com sucesso.
+13:44:08	[ERRO]	A criação do campo [ID_ATT] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:44:11	[ERRO]	A criação do campo [CODE_DPT] na tabela [@LGOCTabelaFunc] apresentou o seguinte erro: - (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:44:12	[AVISO]	A tabela [LGOLCTABELADPT] já existe na base de dados.
+13:44:12	[AVISO]	O campo [CODE] já existe na tabela [@LGOLCTABELADPT].
+13:44:12	[AVISO]	O campo [NAME] já existe na tabela [@LGOLCTABELADPT].
+13:44:12	[AVISO]	O campo [CODE_DPT] já existe na tabela [@LGOLCTABELADPT].
+13:44:12	[AVISO]	O campo [DPT] já existe na tabela [@LGOLCTABELADPT].
+13:44:12	[AVISO]	O campo [ID_DPTS] já existe na tabela [@LGOLCTABELADPT].
+13:44:12	[ERRO]	Ao atualizar o registro do objeto [LGOCTabelaFunc] o seguinte erro foi encontrado: (Esta entrada já existe nas tabelas seguintes (ODBC -2035)).
+13:44:16	[SUCESSO]	O campo [CODE_DPT] na tabela [@LGOCTABELAFUNC] foi removido com sucesso.
+13:44:20	[SUCESSO]	O campo [U_ID_DPT] na tabela [@LGOCTABELAFUNC] foi removido com sucesso.
+13:44:20	[RESUMO]	*************************
+13:44:20	[RESUMO]	TABELAS CRIADAS:        0
+13:44:20	[RESUMO]	TABELAS ATUALIZADAS:    0
+13:44:20	[RESUMO]	TABELAS REMOVIDAS:      0
+13:44:20	[RESUMO]	CAMPOS CRIADOS:         1
+13:44:20	[RESUMO]	CAMPOS ATUALIZADOS:     0
+13:44:20	[RESUMO]	CAMPOS REMOVIDOS:       2
+13:44:20	[RESUMO]	OBJETOS CRIADOS:        0
+13:44:20	[RESUMO]	OBJETOS ATUALIZADOS:    0
+13:44:20	[RESUMO]	OBJETOS REMOVIDOS:      0
+13:44:20	[RESUMO]	USERKEYS CRIADAS:       0
+13:44:20	[RESUMO]	USERKEYS REMOVIDAS:     0
+13:44:20	[RESUMO]	SCRYPTS EXECUTADOS:     0
+13:44:20	[RESUMO]	CONSULTAS CRIADAS:      0
+13:44:20	[RESUMO]	CONSULTAS ATUALIZADAS:  0
+13:44:20	[RESUMO]	CONSULTAS REMOVIDAS:    0
+13:44:20	[RESUMO]	PESQUISA CRIADAS:       0
+13:44:20	[RESUMO]	PESQUISA ATUALIZADAS:   0
+13:44:20	[RESUMO]	PESQUISA REMOVIDAS:     0
+13:44:20	[RESUMO]	PERMISSÕES CRIADAS:     0
+13:44:20	[RESUMO]	PERMISSÕES ATUALIZADAS: 0
+13:44:20	[RESUMO]	PERMISSÕES REMOVIDAS:   0

@@ -24,6 +24,33 @@ public class VendedorService(SAPBase sapBase)
         return filiais;
     }
 
+    public async Task<VendedorConsultaDTO> BuscarPorCodigo(int codigo)
+    {
+        var query = new StringBuilder(@"SELECT
+	                                        OP.""SlpCode"" AS ""Codigo"",
+	                                        OP.""SlpName"" AS ""Nome"",
+	                                        OP.""Commission"" AS ""Comissao"",
+	                                        OG.""GroupName"" AS ""Grupo""
+                                        FROM
+	                                        OSLP OP
+                                        INNER JOIN OCOG OG ON
+	                                        OP.""GroupCode"" = OG.""GroupCode""
+                                        WHERE OP.""SlpCode"" = ? ");
+
+        var parametro = new OdbcParameter { Value = codigo };
+
+        var vendedor = await _sapBase.QuerySingle(query.ToString(), parametro,
+               r => new VendedorConsultaDTO
+               {
+                   Codigo = r.GetInt32(0),
+                   Nome = r.GetString(1),
+                   Comissao = r.GetDecimal(2),
+                   Grupo = r.GetString(3),
+               });
+
+        return vendedor is null ? new VendedorConsultaDTO() : vendedor;
+    }
+
     public async Task<List<ValorComissionavelPedidoDTO>> ObterValoresComissionavel(int documentoEntrada)
     {
         var query = new StringBuilder(@"SELECT                                          	
